@@ -22,10 +22,10 @@ router.get('/sign-up', (req, res) => {
 // Sign-up route (POST)
 router.post('/sign-up', async (req, res) => {
   try {
-    const { username, passwordHash, email } = req.body;
+    const { username, password, email } = req.body;
 
     // Validate required fields
-    if (!username || !passwordHash || !email) {
+    if (!username || !password || !email) {
       return res.status(400).json({ message: 'Missing required fields: username, password, or email' });
     }
 
@@ -36,7 +36,7 @@ router.post('/sign-up', async (req, res) => {
     }
 
     // Hash the password securely
-    const hashedPassword = await bcrypt.hash(passwordHash, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create a new user object with hashed password
     const newUser = new User({
@@ -78,16 +78,19 @@ router.post('/sign-in', async (req, res) => {
     if (!user) {
       return res.status(401).json({ message: 'Invalid username or password' });
     }
+    console.log('Received password:', password);
+    console.log('Retrieved passwordHash:', user.passwordHash);
 
     // Compare hashed passwords securely
     const isMatch = await bcrypt.compare(password, user.passwordHash);
     if (!isMatch) {
+      console.log('Password mismatch for user:', username);
       return res.status(401).json({ message: 'Invalid username or password' });
     }
 
     // User authenticated, store essential user data in session
-    req.session.user = { username }; // Store only essential user data
-
+    req.session.user = { id: user._id, username: user.username }; // Store user ID and username
+    console.log('User signed in successfully:', username);
     // Redirect to home page or send a success JSON response
     res.redirect('/'); // Or send a success JSON response
   } catch (error) {

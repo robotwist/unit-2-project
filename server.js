@@ -19,7 +19,7 @@ const itemsController = require('./controllers/itemsController.js');
 const isSignedIn = require('./middleware/isSignedIn.js');
 const passUserToView = require('./middleware/passUserToView.js');
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3045;
 
 // MongoDB Connection (using environment variables)
 mongoose.connect(process.env.MONGODB_URI)

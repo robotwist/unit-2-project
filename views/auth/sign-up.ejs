@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up - Prestigious Analogue Society</title>
+  <link rel="stylesheet" href="/styles/main.css" />
+</head>
+<body>
+  <header>
+    <h1>Trashdiv5: VCR, NES, SEGA?</h1>
+  </header>
+
+  <main>
+    <section class="form-section">
+      <h2>Create Diver ID</h2>
+      <form action="/auth/sign-up" method="POST" class="sign-up-form">
+        <div class="form-group">
+          <label for="username">trashid:</label>
+          <input 
+            type="text" 
+            name="username" 
+            id="username" 
+            required 
+            placeholder="garbageuserid"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input 
+            type="email" 
+            name="email" 
+            id="email" 
+            required 
+            placeholder="your_email@example.com" 
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="passwordHash">7rashpass:</label>
+          <input 
+            type="passwordHash" 
+            name="passwordHash" 
+            id="passwordHash" 
+            required 
+            placeholder="strongtrashpass"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">confirmtrash:</label>
+          <input 
+            type="passwordHash" 
+            name="confirmPassword" 
+            id="confirmPassword" 
+            required 
+            placeholder="reentertrashpass"
+          />
+        </div>
+
+        <button type="submit" class="btn">Sign Up</button> 
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>NO ONE WELCOME! LEAVE!</p>
+  </footer>
+</body>
+</html>

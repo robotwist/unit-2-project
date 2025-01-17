@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analog Society - My Exchanges</title> 
+    <link rel="stylesheet" href="/styles/main.css"> 
+</head>
+<body>
+
+    <div class="slide-in-container"> 
+        <%- include('../../partials/header') %> 
+
+        <main>
+            <h1>My Exchanges</h1>
+
+            <% if (exchanges.length === 0) { %>
+                <p>You have no current exchanges.</p>
+            <% } else { %>
+                <ul class="exchange-list">
+                    <% exchanges.forEach(exchange => { %>
+                        <li>
+                            <a href="/exchanges/<%= exchange._id %>">
+                                Exchange for <%= exchange.itemId.name %> 
+                            </a> 
+                            - Status: <%= exchange.status %>
+                        </li>
+                    <% }); %>
+                </ul>
+            <% } %> 
+        </main>
+
+        <%- include('../../partials/footer') %> 
+    </div>
+
+    <script src="/scripts/main.js"></script>
+</body>
+</html>

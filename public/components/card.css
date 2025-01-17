@@ -1,0 +1,20 @@
+/* Card Styles */
+.card {
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Subtle Card Styles with Texture */
+.cardsubtle {
+  background-color: #f0f0f0; /* Off-white base */
+  border: 1px solid #ccc; /* Subtle border */
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  padding: 1rem;
+  background-image: url('subtle-silver-texture.jpg'); /* Subtle texture */
+  background-size: cover;
+  background-position: center;
+}

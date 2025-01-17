@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analog Society - Exchange Details</title> 
+    <link rel="stylesheet" href="/styles/main.css"> 
+</head>
+<body>
+
+    <div class="slide-in-container"> 
+        <%- include('../../partials/header') %> 
+
+        <main>
+            <h2>Exchange Details</h2>
+
+            <p><strong>Item:</strong> <%= exchange.itemId.name %></p>
+            <p><strong>Borrower:</strong> <%= exchange.borrowerId.username %></p>
+            <p><strong>Lender:</strong> <%= exchange.lenderId.username %></p>
+            <p><strong>Start Date:</strong> <%= new Date(exchange.startDate).toLocaleDateString() %></p>
+            <p><strong>Due Date:</strong> <%= new Date(exchange.dueDate).toLocaleDateString() %></p>
+            <p><strong>Status:</strong> <%= exchange.status %></p>
+
+        </main>
+
+        <%- include('../../partials/footer') %> 
+    </div>
+
+    <script src="/scripts/main.js"></script>
+</body>
+</html>

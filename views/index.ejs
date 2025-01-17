@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Denied Analogue</title>
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+
+    <div class="slide-in-container"> 
+        <header>
+            <% if (user) { %>
+                <h1>Welcome, <%= user.username %>!</h1>
+                <nav>
+                    <a href="/items" class="btn join-button" aria-label="Register Item">Register Item</a>
+                    <a href="/auth/sign-out" aria-label="Sign out">Trash Out</a>
+                </nav>
+            <% } else { %>
+                <h1>Digital Fortress</h1>
+                <nav>
+                    <a href="/auth/sign-up" aria-label="Sign up">INITIAL ACCESS</a>
+                    <a href="/auth/sign-in" aria-label="Sign in">DUMPSTER DIVE</a>
+                </nav>
+            <% } %>
+        </header>
+
+        <main>
+            <section class="vip-lounge">
+                <p>
+                    <a href="/vip-lounge" aria-label="VIP Garbage Access">VIP GARBAGE ACCESS</a>
+                </p>
+            </section>
+
+            <section class="hero">
+                <div class="container">
+                  <div class="image-container"> 
+                    <img 
+                      src="images/portalto80s.jpeg" 
+                      alt="A Portal" 
+                      class="hero-image"
+                    >
+                  </div>
+                  <h2>SALVAGE ELECTRONICS</h2>
+                  <p>ICONIC AUDIO & VIDEO</p>
+                  <a href="/items" class="btn join-button" aria-label="Register Items">Flush Risk</a>
+                </div>
+              </section>
+        </main>
+
+        <footer>
+            <p>CREDIT ACCEPTED</p>
+        </footer>
+    </div>
+
+    <!-- <script src="/scripts/main.js"></script> -->
+</body>
+</html>

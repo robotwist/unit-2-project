@@ -1,0 +1,37 @@
+.catalog {
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    grid-gap: 2rem; 
+  }
+  
+  .product-item {
+    border: 1px solid #eee; 
+    border-radius: 5px;
+    overflow: hidden; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .product-image {
+    width: 100%; 
+    height: auto; 
+    transition: transform 0.3s ease; 
+  }
+  
+  .product-item:hover .product-image {
+    transform: scale(1.05); 
+  }
+  
+  .product-info {
+    padding: 1rem;
+  }
+  
+  .product-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  .product-price {
+    color: #333;
+    font-weight: bold;
+  }

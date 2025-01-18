@@ -13,9 +13,9 @@ const itemsRouter = require('./routes/itemsRoutes.js');
 const requestsRouter = require('./routes/requestsRoutes.js');
 
 const requestsController = require('./routes/requestsRoutes.js');
-const authController = require('./controllers/authController.js');
 const itemsController = require('./controllers/itemsController.js');
 
+const authController = require('./controllers/authController.js');
 const isSignedIn = require('./middleware/isSignedIn.js');
 const passUserToView = require('./middleware/passUserToView.js');
 
@@ -49,15 +49,23 @@ app.use(morgan('dev')); // Log HTTP requests
 // Session Configuration (using environment variables)
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || 'defaultSecret',
+    secret: process.env.SESSION_SECRET || 'cookiecrisp',
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
+    cookie: { secure: false,
+              httpOnly: true,
+              maxAge: 1000 * 60 * 60 * 24 * 7
+     },
   })
 );
 
 // View Engine
 app.set('view engine', 'ejs');
 app.set('views', './views');
+
+
+// Custom Middleware to Pass User to Views
+app.use(passUserToView);
 
 // Routes
 app.get('/', (req, res) => {
@@ -77,9 +85,6 @@ app.get('/vip-lounge', isSignedIn, (req, res) => {
     res.send('Sorry, no guests allowed.');
   }
 });
-
-app.use(passUserToView); // Place after session middleware
-
 // Auth Controller (mounted under '/auth')
 app.use('/auth', authController);
 app.use('/items', itemsRouter);

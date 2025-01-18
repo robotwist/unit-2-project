@@ -68,45 +68,46 @@ router.get('/sign-in', (req, res) => {
   res.render('auth/sign-in.ejs');
 });
 
-// Sign-in route (POST)
+// Sign-In Handler (POST /auth/sign-in)
 router.post('/sign-in', async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    // Find user by username (assuming unique username)
+    // Find user by username (assuming usernames are unique)
     const user = await User.findOne({ username });
     if (!user) {
-      return res.status(401).json({ message: 'Invalid username or password' });
+      return res.status(401).render('sign-in', { error: 'Invalid username or password.' });
     }
-    console.log('Received password:', password);
-    console.log('Retrieved passwordHash:', user.passwordHash);
 
-    // Compare hashed passwords securely
+    // Compare entered password with stored hashed password
     const isMatch = await bcrypt.compare(password, user.passwordHash);
     if (!isMatch) {
-      console.log('Password mismatch for user:', username);
-      return res.status(401).json({ message: 'Invalid username or password' });
+      return res.status(401).render('sign-in', { error: 'Invalid username or password.' });
     }
 
-    // User authenticated, store essential user data in session
-    req.session.user = { id: user._id, username: user.username }; // Store user ID and username
-    console.log('User signed in successfully:', username);
-    // Redirect to home page or send a success JSON response
-    res.redirect('/'); // Or send a success JSON response
+
+    // User authenticated, store user information in session
+    req.session.user = {
+      id: user._id,
+      username: user.username,
+    };
+
+    // Redirect to items list after successful sign-in
+    res.redirect('/items');
   } catch (error) {
-    console.error('Error signing in user:', error);
-    res.status(500).json({ message: 'Error signing in' });
+    console.error('Error during sign-in:', error);
+    res.status(500).render('sign-in', { error: 'An error occurred. Please try again.' });
   }
 });
 
-// Sign-out route
+// Sign-Out Handler (GET /auth/sign-out)
 router.get('/sign-out', (req, res) => {
   req.session.destroy((err) => {
     if (err) {
-      console.error('Error destroying session:', err);
-      return res.status(500).send('Failed to sign out.');
+      console.error('Error destroying session during sign-out:', err);
+      return res.status(500).send('An error occurred during sign-out.');
     }
-    res.redirect('/');
+    res.redirect('/sign-in');
   });
 });
 

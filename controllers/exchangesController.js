@@ -1,6 +1,7 @@
 const Exchange = require('../models/Exchange');
 const Item = require('../models/Item');
 const Request = require('../models/Request'); // Add request line
+
 const exchangesController = {
   // Create a new exchange (when a request is accepted)
   createExchange: async (req, res) => {
@@ -16,6 +17,11 @@ const exchangesController = {
         return res.status(404).send('Request not found.');
       }
 
+      // Authorization check
+      if (!req.session.user || req.session.user._id !== request.lenderId.toString()) {
+        return res.status(403).send('Unauthorized.');
+      }
+
       if (request.status !== 'Accepted') {
         return res.status(400).send('Only accepted requests can be converted to exchanges.');
       }
@@ -24,16 +30,25 @@ const exchangesController = {
         itemId: request.itemId,
         borrowerId: request.requesterId,
         lenderId: request.lenderId,
-        startDate: Date.now(), 
-        dueDate: // Calculate due date (you can implement your own logic here) 
+        startDate: Date.now(),
+        dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // Due date set to one week from now
       });
 
-      await newExchange.save();
+      const session = await Exchange.startSession();
+      session.startTransaction();
+      try {
+        await newExchange.save({ session });
+        await Request.findByIdAndUpdate(requestId, { status: 'Borrowed' }, { session });
+        await session.commitTransaction();
+        session.endSession();
+        res.redirect(`/exchanges/${newExchange._id}`);
+      } catch (error) {
+        await session.abortTransaction();
+        session.endSession();
+        console.error('Error creating exchange:', error);
+        res.status(500).send('Error creating exchange. Please try again.');
+      }
 
-      // Update request status to "Borrowed"
-      await Request.findByIdAndUpdate(requestId, { status: 'Borrowed' });
-
-      res.redirect(`/exchanges/${newExchange._id}`); 
     } catch (error) {
       console.error('Error creating exchange:', error);
       res.status(500).send('Error creating exchange. Please try again.');
@@ -45,6 +60,7 @@ const exchangesController = {
     try {
       const userId = req.session.user._id;
       const exchanges = await Exchange.find()
+        .lean()
         .or([{ borrowerId: userId }, { lenderId: userId }]) 
         .populate('itemId')
         .populate('borrowerId')
@@ -60,6 +76,7 @@ const exchangesController = {
   getExchangeById: async (req, res) => {
     try {
       const exchange = await Exchange.findById(req.params.exchangeId)
+        .lean()
         .populate('itemId')
         .populate('borrowerId')
         .populate('lenderId'); 

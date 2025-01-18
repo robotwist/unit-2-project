@@ -32,7 +32,10 @@ const itemSchema = new mongoose.Schema({
         type: String,
         enum: ['Available', 'On Loan'],
         default: 'Available'
-    }
+    },
+}, {
+  timestamps: true,
 });
+
 
 module.exports = mongoose.model('Item', itemSchema);

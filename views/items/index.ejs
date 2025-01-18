@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Analog Society - Register Item</title>
+  <title>Analog Society - Items</title>
   <link rel="stylesheet" href="/styles/main.css">
 </head>
 <body>
@@ -12,58 +12,43 @@
     <%- include('../partials/header') %>
 
     <main>
-      <h2>Register Item</h2>
+      <h2>Items</h2>
+      <a href="/items/new" class="btn btn-primary">Add New Item</a>
 
-      <% if (locals.errors) { %>
-        <ul class="error-messages">
-          <% for (const error of locals.errors) { %>
-            <li><%= error.message %></li>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Condition</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (items.length === 0) { %>
+            <tr>
+              <td colspan="4">No items found.</td>
+            </tr>
+          <% } else { %>
+            <% for (const item of items) { %>
+              <tr>
+                <td><%= item.name %></td>
+                <td><%= item.category %></td>
+                <td><%= item.condition %></td>
+                <td>
+                  <a href="/items/<%= item._id %>" class="btn btn-secondary">View</a>
+                  <a href="/items/<%= item._id %>/edit" class="btn btn-primary">Edit</a>
+                  <form action="/items/<%= item._id %>?_method=DELETE" method="POST" class="inline-form">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            <% } %>
           <% } %>
-        </ul>
-      <% } %>
+        </tbody>
+      </table>
+    </main>
 
-      <form action="/items" method="POST">
-         
-        <div class="form-group">
-          <label for="name">Item Name:</label>
-          <input type="text" id="name" name="name" required>
-        </div>
-
-        <div class="form-group">
-          <label for="description">Description:</label>
-          <textarea id="description" name="description" rows="5" required></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="category">Category:</label>
-          <select id="category" name="category" required>
-            <option value="Books">Books</option>
-            <option value="Records">Records</option>
-            <option value="Games">Games</option>
-            <option value="Art">Art</option>
-            <option value="Electronics">Electronics</option>
-            <option value="Others">Others</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="condition">Condition:</label>
-          <select id="condition" name="condition" required>
-            <option value="Excellent">Excellent</option>
-            <option value="Good">Good</option>
-            <option value="Fair">Fair</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="image">Image (Optional):</label>
-          <input type="file" id="image" name="image">
-          <p>Upload an image to represent your item.</p>
-        </div>
-
-        <button type="submit">Register Item</button>
-      
-      
     <%- include('../partials/footer') %>
   </div>
 

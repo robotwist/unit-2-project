@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analog Society - <%= item.name %></title>
+  <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+
+  <div class="slide-in-container">
+    <%- include('../partials/header') %>
+
+    <main>
+      <h2><%= item.name %></h2>
+
+      <p><strong>Category:</strong> <%= item.category %></p>
+      <p><strong>Condition:</strong> <%= item.condition %></p>
+      <p><strong>Description:</strong> <%= item.description %></p>
+
+      <% if (item.image) { %>
+        <img src="<%= item.image %>" alt="<%= item.name %>" style="max-width: 200px;">
+      <% } %>
+
+      <a href="/items/<%= item._id %>/edit" class="btn btn-primary">Edit</a>
+      <form action="/items/<%= item._id %>?_method=DELETE" method="POST" class="inline-form">
+        <button type="submit" class="btn btn-danger">Delete</button>
+      </form>
+    </main>
+
+    <%- include('../partials/footer') %>
+  </div>
+
+  <script src="/scripts/main.js"></script>
+</body>
+</html>

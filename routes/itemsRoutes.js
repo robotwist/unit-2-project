@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 const itemsController = require('../controllers/itemsController');
 const isSignedIn = require('../middleware/isSignedIn');
-const Item = require('../models/Item'); // Import the Item model
+
 // Create a new item (Protected Route)
 router.post('/', isSignedIn, itemsController.createItem);
 
@@ -20,9 +20,9 @@ router.get('/new', isSignedIn, (req, res) => {
 router.get('/:itemId', isSignedIn, itemsController.getItemById);
 
 // Render form to edit an existing item (Optional: If using server-side rendering)
-router.get('/:itemId/edit', isSignedIn, async (req, res) => { // Corrected :id to :itemId
+router.get('/:itemId/edit', isSignedIn, async (req, res) => {
   try {
-    const item = await Item.findById(req.params.itemId); // Corrected req.params.id to req.params.itemId
+    const item = await Item.findById(req.params.itemId);
     if (!item) {
       return res.status(404).send('Item not found.');
     }

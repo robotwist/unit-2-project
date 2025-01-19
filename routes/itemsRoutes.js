@@ -20,12 +20,9 @@ router.get('/new', isSignedIn, (req, res) => {
 router.get('/:itemId', isSignedIn, itemsController.getItemById);
 
 // Render form to edit an existing item (Optional: If using server-side rendering)
-router.get('/:itemId/edit', isSignedIn, async (req, res) => { // Corrected :id to :itemId
+router.get('/edit/:itemId', isSignedIn, async (req, res) => { // Corrected :id to :itemId
   try {
-    const item = await Item.findById(req.params.itemId); // Corrected req.params.id to req.params.itemId
-    if (!item) {
-      return res.status(404).send('Item not found.');
-    }
+    const item = await Item.findById(req.params.itemId)
     // Check if the current user is the owner
     if (item.userId.toString() !== req.session.user.id) {
       return res.status(403).send('You are not authorized to edit this item.');
@@ -39,7 +36,7 @@ router.get('/:itemId/edit', isSignedIn, async (req, res) => { // Corrected :id t
 
 // Update an item (Protected Route)
 router.put('/:itemId', isSignedIn, itemsController.updateItem);
-
+  
 // Delete an item (Protected Route)
 router.delete('/:itemId', isSignedIn, itemsController.deleteItem);
 

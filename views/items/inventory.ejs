@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analog Society - Inventory</title>
+  <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+  <div class="slide-in-container">
+    <%- include('../partials/header') %>
+
+    <main>
+      <h2>Your Inventory</h2>
+
+      <% if (messages.success) { %>
+        <div class="flash-message success"><%= messages.success %></div>
+      <% } %>
+      <% if (messages.error) { %>
+        <div class="flash-message error"><%= messages.error %></div>
+      <% } %>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Condition</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% items.forEach(item => { %>
+            <tr>
+              <td><%= item.name %></td>
+              <td><%= item.description %></td>
+              <td><%= item.category %></td>
+              <td><%= item.condition %></td>
+              <td>
+                <a href="/items/<%= item._id %>/edit">Edit</a>
+                <form action="/items/<%= item._id %>?_method=DELETE" method="POST" style="display: inline;">
+                  <button type="submit">Delete</button>
+                </form>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+
+    </main>
+
+    <%- include('../partials/footer') %>
+  </div>
+  <script src="/scripts/main.js"></script>
+
+  <script>
+    setTimeout(() => {
+      const flashMessage = document.querySelector('.flash-message');
+      if (flashMessage) {
+        flashMessage.classList.add('fade-out');
+        setTimeout(() => flashMessage.remove(), 500); // Remove after animation
+      }
+    }, 3000); // Display for 3 seconds
+  </script>
+</body>
+</html>

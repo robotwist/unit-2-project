@@ -1,4 +1,3 @@
-// controllers/itemsController.js
 
 const Item = require('../models/Item'); // Adjust the path as necessary
 
@@ -33,7 +32,10 @@ const validateItem = (data) => {
 };
 
 // Create a new item
+
 const createItem = async (req, res) => {
+  console.log(req.body, "req.body")
+  
   try {
     // Extract item details from request body
     const { name, description, category, condition, image } = req.body;
@@ -61,7 +63,7 @@ const createItem = async (req, res) => {
 
     // Redirect to the items list after successful creation
     
-    res.redirect('/items');
+    res.redirect('items/new');
   } catch (error) {
     console.error('Error creating item:', error);
     res.status(500).render('items/new', { error: 'An unexpected error occurred while creating the item. Please try again later.' });
@@ -70,6 +72,7 @@ const createItem = async (req, res) => {
 
 // Get all items (optionally filtered by the authenticated user)
 const getItems = async (req, res) => {
+  console.log(req.session.user.id , "req.session.user.id")
   try {
     let items;
     if (req.session.user && req.session.user.id) {
@@ -78,9 +81,12 @@ const getItems = async (req, res) => {
     } else {
       // Retrieve all items (or you can restrict to authenticated users only)
       items = await Item.find().sort({ createdAt: -1 });
-    }
 
-    res.render('items/index', { items });
+    }
+   
+    res.render('items/index', { 
+      items,
+      loggedInUser: req.session.user ? req.session.user.id : null} )
   } catch (error) {
     console.error('Error fetching items:', error);
     res.status(500).send('An unexpected error occurred while fetching items.');
@@ -89,28 +95,14 @@ const getItems = async (req, res) => {
 
 // Get a single item by ID
 const getItemById = async (req, res) => {
-  try {
-    const { itemId } = req.params;
-
-    // Validate item ID format
-    if (!itemId.match(/^[0-9a-fA-F]{24}$/)) {
-      return res.status(400).send('Invalid item ID format.');
-    }
-
-    const item = await Item.findById(itemId);
-    if (!item) {
-      return res.status(404).send('Item not found.');
-    }
-
+  const { itemId } = req.params;
+  const item = await Item.findById(itemId)
     res.render('items/show', { item });
-  } catch (error) {
-    console.error('Error fetching item:', error);
-    res.status(500).send('An unexpected error occurred while fetching the item.');
-  }
 };
 
 // Update an item
 const updateItem = async (req, res) => {
+  console.log(req.body, "req.body")
   try {
     const { itemId } = req.params;
     const { name, description, category, condition, image } = req.body;
@@ -158,16 +150,6 @@ const deleteItem = async (req, res) => {
   try {
     const { itemId } = req.params;
 
-    // Validate user authentication
-    if (!req.session.user || !req.session.user.id) {
-      return res.status(401).send('You must be logged in to delete an item.');
-    }
-
-    // Validate item ID format
-    if (!itemId.match(/^[0-9a-fA-F]{24}$/)) {
-      return res.status(400).send('Invalid item ID format.');
-    }
-
     const item = await Item.findById(itemId);
     if (!item) {
       return res.status(404).send('Item not found.');
@@ -175,6 +157,8 @@ const deleteItem = async (req, res) => {
 
     if (item.userId.toString() !== req.session.user.id) {
       return res.status(403).send('You are not authorized to delete this item.');
+     
+    
     }
 
     await Item.findByIdAndDelete(itemId);

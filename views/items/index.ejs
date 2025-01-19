@@ -37,10 +37,14 @@
                 <td><%= item.condition %></td>
                 <td>
                   <a href="/items/<%= item._id %>" class="btn btn-secondary">View</a>
-                  <a href="/items/<%= item._id %>/edit" class="btn btn-primary">Edit</a>
-                  <form action="/items/<%= item._id %>?_method=DELETE" method="POST" class="inline-form">
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                  </form>
+
+                  <!-- Only show edit/delete options if the user owns the item -->
+                  <% if (loggedInUser && item.userId.toString() === loggedInUser) { %>
+                    <a href="/items/edit/<%= item._id %>" class="btn btn-warning">Edit</a>
+                    <form action="/items/<%= item._id %>?_method=DELETE" method="POST" class="inline-form">
+                      <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                  <% } %>
                 </td>
               </tr>
             <% } %>
@@ -48,10 +52,7 @@
         </tbody>
       </table>
     </main>
-
-    <%- include('../partials/footer') %>
   </div>
 
-  <script src="/scripts/main.js"></script>
 </body>
 </html>

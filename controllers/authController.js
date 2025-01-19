@@ -55,7 +55,7 @@ router.post('/sign-up', async (req, res) => {
       res.status(201).json({ message: 'User created successfully' });
     } else {
       // Redirect to login page for development environments
-      res.redirect('/auth/login');
+      res.redirect('/auth/sign-in');
     }
   } catch (error) {
     console.error('Error creating user:', error);
@@ -65,7 +65,7 @@ router.post('/sign-up', async (req, res) => {
 
 // Sign-in route (GET)
 router.get('/sign-in', (req, res) => {
-  res.render('auth/sign-in.ejs');
+  res.render('auth/sign-in');
 });
 
 // Sign-In Handler (POST /auth/sign-in)
@@ -76,7 +76,7 @@ router.post('/sign-in', async (req, res) => {
     // Find user by username (assuming usernames are unique)
     const user = await User.findOne({ username });
     if (!user) {
-      return res.status(401).render('sign-in', { error: 'Invalid username or password.' });
+      return res.status(401).render('auth/sign-in', { error: 'Invalid username or password.' });
     }
 
     // Compare entered password with stored hashed password
@@ -106,6 +106,7 @@ router.get('/sign-out', (req, res) => {
     if (err) {
       console.error('Error destroying session during sign-out:', err);
       return res.status(500).send('An error occurred during sign-out.');
+      res.clearCookie('connect.sid');
     }
     res.redirect('/sign-in');
   });

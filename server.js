@@ -92,9 +92,9 @@ app.use('/requests', requestsRouter);
 
 // Start Server
 app.listen(port, () => {
-  console.log('The Express app is running on http:localhost:${port}');
+  console.log(`The Express app is running on http://localhost:${port}`);
 });
-
+  
 // Handle Graceful Shutdown
 process.on('SIGINT', () => {
   mongoose.connection.close(() => {

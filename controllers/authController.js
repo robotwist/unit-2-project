@@ -82,7 +82,7 @@ router.post('/sign-in', async (req, res) => {
     // Compare entered password with stored hashed password
     const isMatch = await bcrypt.compare(password, user.passwordHash);
     if (!isMatch) {
-      return res.status(401).render('sign-in', { error: 'Invalid username or password.' });
+      return res.status(401).render('auth/sign-in', { error: 'Invalid username or password.' });
     }
 
 
@@ -96,7 +96,7 @@ router.post('/sign-in', async (req, res) => {
     res.redirect('/items');
   } catch (error) {
     console.error('Error during sign-in:', error);
-    res.status(500).render('sign-in', { error: 'An error occurred. Please try again.' });
+    res.status(500).render('auth/sign-in', { error: 'An error occurred. Please try again.' });
   }
 });
 

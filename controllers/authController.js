@@ -49,14 +49,8 @@ router.post('/sign-up', async (req, res) => {
     // Save the user to the database
     await newUser.save();
 
-    // Redirect to login page or send success response (flexible approach)
-    if (process.env.NODE_ENV === 'production') {
-      // Send success JSON response for production environments (API)
-      res.status(201).json({ message: 'User created successfully' });
-    } else {
-      // Redirect to login page for development environments
       res.redirect('/auth/sign-in');
-    }
+    
   } catch (error) {
     console.error('Error creating user:', error);
     res.status(500).json({ message: 'Error creating user' });

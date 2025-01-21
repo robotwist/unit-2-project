@@ -75,12 +75,12 @@ app.get('/', (req, res) => {
 });
 
 app.get('/sign-in', (req, res) => {
-  res.render('sign-in'); // Ensure 'sign-in.ejs' exists in the 'views' directory
+  res.render('auth/sign-in'); 
 });
 
 app.get('/vip-lounge', isSignedIn, (req, res) => {
   if (req.session.user) {
-    res.send('Welcome to the party, ${req.session.user.username}.');
+    res.send('There are no VIPs in the garbage dump you filthy animal!')
   } else {
     res.send('Sorry, no guests allowed.');
   }

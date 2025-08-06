@@ -67,7 +67,7 @@ To run **Analog Society** locally, follow these steps:
    ```bash
    npm start
    ```
-   The app should now be running on `http://localhost:3000`.
+   The app should now be running on `http://localhost:3045`.
 
 ## Usage
 

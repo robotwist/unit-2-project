@@ -13,7 +13,65 @@
 
     <main>
       <h2>Items</h2>
-      <a href="/items/new" class="btn btn-primary">Add New Item</a>
+      <div class="page-actions">
+        <a href="/items/new" class="btn btn-primary">Add New Item</a>
+        <a href="/items/community" class="btn btn-secondary">View Community Inventory</a>
+      </div>
+
+      <!-- Search and Filter Section -->
+      <div class="search-filter-section">
+        <form method="GET" action="/items" class="search-form">
+          <div class="search-row">
+            <input 
+              type="text" 
+              name="search" 
+              placeholder="Search items..." 
+              value="<%= search %>"
+              class="search-input"
+            >
+            <button type="submit" class="btn btn-secondary">Search</button>
+          </div>
+          
+          <div class="filter-row">
+            <select name="category" class="filter-select">
+              <% categories.forEach(function(cat) { %>
+                <option value="<%= cat %>" <%= selectedCategory === cat ? 'selected' : '' %>>
+                  <%= cat %>
+                </option>
+              <% }); %>
+            </select>
+            
+            <select name="condition" class="filter-select">
+              <% conditions.forEach(function(cond) { %>
+                <option value="<%= cond %>" <%= selectedCondition === cond ? 'selected' : '' %>>
+                  <%= cond %>
+                </option>
+              <% }); %>
+            </select>
+            
+            <select name="availability" class="filter-select">
+              <% availabilities.forEach(function(avail) { %>
+                <option value="<%= avail %>" <%= selectedAvailability === avail ? 'selected' : '' %>>
+                  <%= avail %>
+                </option>
+              <% }); %>
+            </select>
+            
+            <label class="checkbox-label">
+              <input 
+                type="checkbox" 
+                name="showAll" 
+                value="true" 
+                <%= showAllItems ? 'checked' : '' %>
+                onchange="this.form.submit()"
+              >
+              Show All Items
+            </label>
+            
+            <button type="submit" class="btn btn-secondary">Filter</button>
+          </div>
+        </form>
+      </div>
 
       <table class="table">
         <thead>
@@ -21,13 +79,15 @@
             <th>Name</th>
             <th>Category</th>
             <th>Condition</th>
+            <th>Status</th>
+            <th>Owner</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           <% if (items.length === 0) { %>
             <tr>
-              <td colspan="4">No items found.</td>
+              <td colspan="6">No items found.</td>
             </tr>
           <% } else { %>
             <% for (const item of items) { %>
@@ -36,14 +96,25 @@
                 <td><%= item.category %></td>
                 <td><%= item.condition %></td>
                 <td>
+                  <span class="status-badge status-<%= item.availabilityStatus.toLowerCase().replace(' ', '-') %>">
+                    <%= item.availabilityStatus %>
+                  </span>
+                </td>
+                <td><%= item.userId ? item.userId.username : 'Unknown' %></td>
+                <td>
                   <a href="/items/<%= item._id %>" class="btn btn-secondary">View</a>
 
                   <!-- Only show edit/delete options if the user owns the item -->
-                  <% if (loggedInUser && item.userId.toString() === loggedInUser) { %>
+                  <% if (loggedInUser && item.userId && item.userId._id.toString() === loggedInUser) { %>
                     <a href="/items/edit/<%= item._id %>" class="btn btn-warning">Edit</a>
                     <form action="/items/<%= item._id %>?_method=DELETE" method="POST" class="inline-form">
                       <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
+                  <% } %>
+                  
+                  <!-- Show borrow request button if item is available and user doesn't own it -->
+                  <% if (loggedInUser && item.userId && item.userId._id.toString() !== loggedInUser && item.availabilityStatus === 'Available') { %>
+                    <a href="/requests/create/<%= item._id %>" class="btn btn-success">Request Borrow</a>
                   <% } %>
                 </td>
               </tr>

@@ -17,16 +17,54 @@
             <% if (exchanges.length === 0) { %>
                 <p>You have no current exchanges.</p>
             <% } else { %>
-                <ul class="exchange-list">
-                    <% exchanges.forEach(exchange => { %>
-                        <li>
-                            <a href="/exchanges/<%= exchange._id %>">
-                                Exchange for <%= exchange.itemId.name %> 
-                            </a> 
-                            - Status: <%= exchange.status %>
-                        </li>
-                    <% }); %>
-                </ul>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Borrower</th>
+                            <th>Lender</th>
+                            <th>Status</th>
+                            <th>Due Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% exchanges.forEach(exchange => { %>
+                            <tr>
+                                <td>
+                                    <% if (exchange.itemId) { %>
+                                        <a href="/items/<%= exchange.itemId._id %>"><%= exchange.itemId.name %></a>
+                                    <% } else { %>
+                                        Item not found
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <% if (exchange.borrowerId) { %>
+                                        <%= exchange.borrowerId.username %>
+                                    <% } else { %>
+                                        Unknown
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <% if (exchange.lenderId) { %>
+                                        <%= exchange.lenderId.username %>
+                                    <% } else { %>
+                                        Unknown
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <span class="status-badge status-<%= exchange.status.toLowerCase() %>">
+                                        <%= exchange.status %>
+                                    </span>
+                                </td>
+                                <td><%= new Date(exchange.dueDate).toLocaleDateString() %></td>
+                                <td>
+                                    <a href="/exchanges/<%= exchange._id %>" class="btn btn-secondary">View</a>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
             <% } %> 
         </main>
 

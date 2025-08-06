@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const exchangeSchema = new mongoose.Schema({
     itemId: {
         type: mongoose.Schema.Types.ObjectId,

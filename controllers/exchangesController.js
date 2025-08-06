@@ -65,7 +65,7 @@ const exchangesController = {
         .populate('itemId')
         .populate('borrowerId')
         .populate('lenderId'); 
-      res.render('exchanges/index', { exchanges }); 
+      res.render('exchanges/list', { exchanges }); 
     } catch (error) {
       console.error('Error fetching exchanges:', error);
       res.status(500).send('Error fetching exchanges.');
@@ -83,7 +83,7 @@ const exchangesController = {
       if (!exchange) {
         return res.status(404).send('Exchange not found.');
       }
-      res.render('exchanges/show', { exchange }); 
+      res.render('exchanges/detail', { exchange }); 
     } catch (error) {
       console.error('Error fetching exchange:', error);
       res.status(500).send('Error fetching exchange.');

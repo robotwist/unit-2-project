@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analog Society - Community Inventory</title>
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+
+    <div class="slide-in-container">
+        <%- include('../partials/header') %>
+
+        <main>
+            <h2>Community Inventory</h2>
+            <p class="community-subtitle">Explore the collective analog treasures of our community</p>
+            
+            <!-- Community Statistics -->
+            <div class="community-stats">
+                <h3>Community Statistics</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number"><%= items.length %></div>
+                        <div class="stat-label">Total Items</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number"><%= items.filter(item => item.availabilityStatus === 'Available').length %></div>
+                        <div class="stat-label">Available for Borrow</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number"><%= new Set(items.map(item => item.userId ? item.userId._id.toString() : null).filter(Boolean)).size %></div>
+                        <div class="stat-label">Active Contributors</div>
+                    </div>
+                </div>
+                
+                <!-- Top Contributors -->
+                <% if (userStats && userStats.length > 0) { %>
+                    <div class="top-contributors">
+                        <h4>Top Contributors</h4>
+                        <div class="contributors-list">
+                            <% userStats.forEach((stat, index) => { %>
+                                <div class="contributor-item">
+                                    <span class="contributor-rank">#<%= index + 1 %></span>
+                                    <span class="contributor-name"><%= stat.username %></span>
+                                    <span class="contributor-count"><%= stat.itemCount %> items</span>
+                                </div>
+                            <% }); %>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+
+            <!-- Search and Filter Section -->
+            <div class="search-filter-section">
+                <form method="GET" action="/items/community" class="search-form">
+                    <div class="search-row">
+                        <input 
+                            type="text" 
+                            name="search" 
+                            placeholder="Search community items..." 
+                            value="<%= search %>"
+                            class="search-input"
+                        >
+                        <button type="submit" class="btn btn-secondary">Search</button>
+                    </div>
+                    
+                    <div class="filter-row">
+                        <select name="category" class="filter-select">
+                            <% categories.forEach(function(cat) { %>
+                                <option value="<%= cat %>" <%= selectedCategory === cat ? 'selected' : '' %>>
+                                    <%= cat %>
+                                </option>
+                            <% }); %>
+                        </select>
+                        
+                        <select name="condition" class="filter-select">
+                            <% conditions.forEach(function(cond) { %>
+                                <option value="<%= cond %>" <%= selectedCondition === cond ? 'selected' : '' %>>
+                                    <%= cond %>
+                                </option>
+                            <% }); %>
+                        </select>
+                        
+                        <select name="availability" class="filter-select">
+                            <% availabilities.forEach(function(avail) { %>
+                                <option value="<%= avail %>" <%= selectedAvailability === avail ? 'selected' : '' %>>
+                                    <%= avail %>
+                                </option>
+                            <% }); %>
+                        </select>
+                        
+                        <button type="submit" class="btn btn-secondary">Filter</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Items Grid -->
+            <div class="items-grid">
+                <% if (items.length === 0) { %>
+                    <div class="no-items">
+                        <p>No items found matching your criteria.</p>
+                        <a href="/items/community" class="btn btn-primary">Clear Filters</a>
+                    </div>
+                <% } else { %>
+                    <% items.forEach(function(item) { %>
+                        <div class="item-card">
+                            <div class="item-image">
+                                <% if (item.image && item.image.startsWith('http')) { %>
+                                    <img src="<%= item.image %>" alt="<%= item.name %>" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzMzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg=='">
+                                <% } else { %>
+                                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzMzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg==" alt="<%= item.name %>">
+                                <% } %>
+                            </div>
+                            
+                            <div class="item-info">
+                                <h4 class="item-name"><%= item.name %></h4>
+                                <p class="item-description"><%= item.description %></p>
+                                
+                                <div class="item-meta">
+                                    <span class="item-category"><%= item.category %></span>
+                                    <span class="item-condition"><%= item.condition %></span>
+                                    <span class="status-badge status-<%= item.availabilityStatus.toLowerCase().replace(' ', '-') %>">
+                                        <%= item.availabilityStatus %>
+                                    </span>
+                                </div>
+                                
+                                <div class="item-owner">
+                                    <div class="owner-info">
+                                        <div class="owner-avatar">
+                                            <% if (item.userId && item.userId.profilePicture && item.userId.profilePicture.startsWith('http')) { %>
+                                                <img src="<%= item.userId.profilePicture %>" alt="<%= item.userId.username %>" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiMzMzMiLz48dGV4dCB4PSIyMCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+PC90ZXh0Pjwvc3ZnPg=='">
+                                            <% } else { %>
+                                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiMzMzMiLz48dGV4dCB4PSIyMCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+PC90ZXh0Pjwvc3ZnPg==" alt="<%= item.userId ? item.userId.username : 'Unknown' %>">
+                                            <% } %>
+                                        </div>
+                                        <div class="owner-details">
+                                            <div class="owner-name"><%= item.userId ? item.userId.username : 'Unknown' %></div>
+                                            <% if (item.userId && item.userId.location) { %>
+                                                <div class="owner-location">📍 <%= item.userId.location %></div>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="item-actions">
+                                    <a href="/items/<%= item._id %>" class="btn btn-secondary">View Details</a>
+                                    
+                                    <% if (loggedInUser && item.userId && item.userId._id.toString() !== loggedInUser && item.availabilityStatus === 'Available') { %>
+                                        <a href="/requests/create/<%= item._id %>" class="btn btn-success">Request Borrow</a>
+                                    <% } %>
+                                    
+                                    <% if (loggedInUser && item.userId && item.userId._id.toString() === loggedInUser) { %>
+                                        <a href="/items/edit/<%= item._id %>" class="btn btn-warning">Edit</a>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
+                <% } %>
+            </div>
+        </main>
+
+        <%- include('../partials/footer') %>
+    </div>
+
+</body>
+</html> 

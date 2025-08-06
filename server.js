@@ -11,6 +11,7 @@ const session = require('express-session');
 
 const itemsRouter = require('./routes/itemsRoutes.js');
 const requestsRouter = require('./routes/requestsRoutes.js');
+const exchangeRouter = require('./routes/exchangeRoutes.js');
 
 const requestsController = require('./routes/requestsRoutes.js');
 const itemsController = require('./controllers/itemsController.js');
@@ -89,6 +90,7 @@ app.get('/vip-lounge', isSignedIn, (req, res) => {
 app.use('/auth', authController);
 app.use('/items', itemsRouter);
 app.use('/requests', requestsRouter);
+app.use('/exchanges', exchangeRouter);
 
 // Start Server
 app.listen(port, () => {

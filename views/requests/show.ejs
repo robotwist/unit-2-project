@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analog Society - Request Details</title>
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+
+    <div class="slide-in-container">
+        <%- include('../partials/header') %>
+
+        <main>
+            <h2>Request Details</h2>
+            
+            <% if (request) { %>
+                <div class="request-details">
+                    <p><strong>Item:</strong> 
+                        <% if (request.itemId) { %>
+                            <a href="/items/<%= request.itemId._id %>"><%= request.itemId.name %></a>
+                        <% } else { %>
+                            Item not found
+                        <% } %>
+                    </p>
+                    
+                    <p><strong>Requester:</strong> 
+                        <% if (request.requesterId) { %>
+                            <%= request.requesterId.username %>
+                        <% } else { %>
+                            Unknown
+                        <% } %>
+                    </p>
+                    
+                    <p><strong>Lender:</strong> 
+                        <% if (request.lenderId) { %>
+                            <%= request.lenderId.username %>
+                        <% } else { %>
+                            Unknown
+                        <% } %>
+                    </p>
+                    
+                    <p><strong>Status:</strong> 
+                        <span class="status-badge status-<%= request.status.toLowerCase() %>">
+                            <%= request.status %>
+                        </span>
+                    </p>
+                    
+                    <p><strong>Date:</strong> <%= new Date(request.timestamp).toLocaleDateString() %></p>
+                    
+                    <% if (request.status === 'Pending' && request.lenderId && request.lenderId._id.toString() === user._id.toString()) { %>
+                        <div class="request-actions">
+                            <form action="/requests/<%= request._id %>/status?_method=PUT" method="POST" class="inline-form">
+                                <input type="hidden" name="status" value="Accepted">
+                                <button type="submit" class="btn btn-success">Accept Request</button>
+                            </form>
+                            
+                            <form action="/requests/<%= request._id %>/status?_method=PUT" method="POST" class="inline-form">
+                                <input type="hidden" name="status" value="Denied">
+                                <button type="submit" class="btn btn-danger">Deny Request</button>
+                            </form>
+                        </div>
+                    <% } %>
+                </div>
+            <% } else { %>
+                <p>Request not found.</p>
+            <% } %>
+            
+            <a href="/requests" class="btn btn-primary">Back to Requests</a>
+        </main>
+
+        <%- include('../partials/footer') %>
+    </div>
+
+</body>
+</html> 

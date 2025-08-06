@@ -13,7 +13,11 @@
             <% if (user) { %>
                 <h1>Welcome, <%= user.username %>!</h1>
                 <nav>
-                    <a href="/items" class="btn join-button" aria-label="Register Item">Register Item</a>
+                    <a href="/items" class="btn join-button" aria-label="My Items">My Items</a>
+                    <a href="/items/community" class="btn join-button" aria-label="Community Inventory">Community</a>
+                    <a href="/items?showAll=true" class="btn join-button" aria-label="Browse All">Browse All</a>
+                    <a href="/exchanges" class="btn join-button" aria-label="My Exchanges">My Exchanges</a>
+                    <a href="/requests" class="btn join-button" aria-label="My Requests">My Requests</a>
                     <a href="/auth/sign-out" aria-label="Sign out">Trash Out</a>
                 </nav>
             <% } else { %>

@@ -70,26 +70,139 @@ const createItem = async (req, res) => {
   }
 };
 
-// Get all items (optionally filtered by the authenticated user)
+// Get all items with search and filtering
 const getItems = async (req, res) => {
-  console.log(req.session.user.id , "req.session.user.id")
   try {
-    let items;
-    if (req.session.user && req.session.user.id) {
-      // Retrieve items created by the authenticated user
-      items = await Item.find({ userId: req.session.user.id }).sort({ createdAt: -1 });
-    } else {
-      // Retrieve all items (or you can restrict to authenticated users only)
-      items = await Item.find().sort({ createdAt: -1 });
-
+    const { search, category, condition, availability } = req.query;
+    const userId = req.session.user ? req.session.user.id : null;
+    
+    // Build query object
+    let query = {};
+    
+    // Search functionality
+    if (search) {
+      query.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } }
+      ];
     }
-   
+    
+    // Category filter
+    if (category && category !== 'All') {
+      query.category = category;
+    }
+    
+    // Condition filter
+    if (condition && condition !== 'All') {
+      query.condition = condition;
+    }
+    
+    // Availability filter
+    if (availability && availability !== 'All') {
+      query.availabilityStatus = availability;
+    }
+    
+    // User filter - show user's own items by default, or all items if specified
+    const showAllItems = req.query.showAll === 'true';
+    if (!showAllItems && userId) {
+      query.userId = userId;
+    }
+    
+    // Execute query with population
+    const items = await Item.find(query)
+      .populate('userId', 'username')
+      .sort({ createdAt: -1 });
+    
+    // Get unique categories and conditions for filter dropdowns
+    const categories = await Item.distinct('category') || [];
+    const conditions = await Item.distinct('condition') || [];
+    
     res.render('items/index', { 
       items,
-      loggedInUser: req.session.user ? req.session.user.id : null} )
+      loggedInUser: userId,
+      search: search || '',
+      selectedCategory: category || 'All',
+      selectedCondition: condition || 'All',
+      selectedAvailability: availability || 'All',
+      showAllItems: showAllItems || false,
+      categories: ['All', ...categories],
+      conditions: ['All', ...conditions],
+      availabilities: ['All', 'Available', 'On Loan']
+    });
   } catch (error) {
     console.error('Error fetching items:', error);
     res.status(500).send('An unexpected error occurred while fetching items.');
+  }
+};
+
+// Get community-wide inventory with user information
+const getCommunityInventory = async (req, res) => {
+  try {
+    const { search, category, condition, availability } = req.query;
+    const userId = req.session.user ? req.session.user.id : null;
+    
+    // Build query object
+    let query = {};
+    
+    // Search functionality
+    if (search) {
+      query.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } }
+      ];
+    }
+    
+    // Category filter
+    if (category && category !== 'All') {
+      query.category = category;
+    }
+    
+    // Condition filter
+    if (condition && condition !== 'All') {
+      query.condition = condition;
+    }
+    
+    // Availability filter
+    if (availability && availability !== 'All') {
+      query.availabilityStatus = availability;
+    }
+    
+    // Execute query with full population of user information
+    const items = await Item.find(query)
+      .populate('userId', 'username bio location profilePicture')
+      .sort({ createdAt: -1 });
+    
+    // Get unique categories and conditions for filter dropdowns
+    const categories = await Item.distinct('category') || [];
+    const conditions = await Item.distinct('condition') || [];
+    
+    // Get user statistics
+    const userStats = await Item.aggregate([
+      { $group: { _id: '$userId', count: { $sum: 1 } } },
+      { $lookup: { from: 'users', localField: '_id', foreignField: '_id', as: 'user' } },
+      { $unwind: '$user' },
+      { $project: { username: '$user.username', itemCount: '$count' } },
+      { $sort: { itemCount: -1 } }
+    ]).catch(err => {
+      console.error('Error getting user stats:', err);
+      return [];
+    });
+    
+    res.render('items/community', { 
+      items,
+      loggedInUser: userId,
+      search: search || '',
+      selectedCategory: category || 'All',
+      selectedCondition: condition || 'All',
+      selectedAvailability: availability || 'All',
+      categories: ['All', ...categories],
+      conditions: ['All', ...conditions],
+      availabilities: ['All', 'Available', 'On Loan'],
+      userStats: userStats.slice(0, 10) // Top 10 users by item count
+    });
+  } catch (error) {
+    console.error('Error fetching community inventory:', error);
+    res.status(500).send('An unexpected error occurred while fetching the community inventory.');
   }
 };
 
@@ -175,6 +288,7 @@ const deleteItem = async (req, res) => {
 module.exports = {
   createItem,
   getItems,
+  getCommunityInventory,
   getItemById,
   updateItem,
   deleteItem,

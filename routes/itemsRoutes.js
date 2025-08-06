@@ -5,6 +5,7 @@ const router = express.Router();
 const itemsController = require('../controllers/itemsController');
 const isSignedIn = require('../middleware/isSignedIn');
 const Item = require('../models/Item'); // Import the Item model
+
 // Create a new item (Protected Route)
 router.post('/', isSignedIn, itemsController.createItem);
 
@@ -15,6 +16,9 @@ router.get('/', isSignedIn, itemsController.getItems);
 router.get('/new', isSignedIn, (req, res) => {
   res.render('items/new'); // Ensure 'items/new.ejs' exists
 });
+
+// Community inventory - shows all items with user info (MUST come before :itemId route)
+router.get('/community', isSignedIn, itemsController.getCommunityInventory);
 
 // Get a single item by ID (Protected Route if necessary)
 router.get('/:itemId', isSignedIn, itemsController.getItemById);

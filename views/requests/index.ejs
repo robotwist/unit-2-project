@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analog Society - My Requests</title>
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+
+    <div class="slide-in-container">
+        <%- include('../partials/header') %>
+
+        <main>
+            <h2>My Requests</h2>
+            
+            <% if (requests && requests.length > 0) { %>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Lender</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% requests.forEach(function(request) { %>
+                            <tr>
+                                <td>
+                                    <% if (request.itemId) { %>
+                                        <a href="/items/<%= request.itemId._id %>"><%= request.itemId.name %></a>
+                                    <% } else { %>
+                                        Item not found
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <% if (request.lenderId) { %>
+                                        <%= request.lenderId.username %>
+                                    <% } else { %>
+                                        Unknown
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <span class="status-badge status-<%= request.status.toLowerCase() %>">
+                                        <%= request.status %>
+                                    </span>
+                                </td>
+                                <td><%= new Date(request.timestamp).toLocaleDateString() %></td>
+                                <td>
+                                    <a href="/requests/<%= request._id %>" class="btn btn-secondary">View</a>
+                                    <% if (request.status === 'Pending') { %>
+                                        <form action="/requests/<%= request._id %>?_method=DELETE" method="POST" class="inline-form">
+                                            <button type="submit" class="btn btn-danger">Cancel</button>
+                                        </form>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <p>You have no requests.</p>
+            <% } %>
+            
+            <a href="/items?showAll=true" class="btn btn-primary">Browse Items</a>
+        </main>
+
+        <%- include('../partials/footer') %>
+    </div>
+
+</body>
+</html> 

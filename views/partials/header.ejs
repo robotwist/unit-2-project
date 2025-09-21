@@ -1,29 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your App Name</title> 
-    <link rel="stylesheet" href="/styles/main.css"> 
-</head>
-<body>
-
-    <div class="slide-in-container"> 
-        <header>
+<header>
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h1><a href="/" style="text-decoration: none; color: inherit;">Analog Society</a></h1>
             <% if (user) { %>
-                <h1>Welcome, <%= user.username %>!</h1>
                 <nav>
-                    <a href="/items" class="btn join-button" aria-label="My Items">My Items</a>
-                    <a href="/items/community" class="btn join-button" aria-label="Community Inventory">Community</a>
-                    <a href="/items?showAll=true" class="btn join-button" aria-label="Browse All">Browse All</a>
-                    <a href="/exchanges" class="btn join-button" aria-label="My Exchanges">My Exchanges</a>
-                    <a href="/requests" class="btn join-button" aria-label="My Requests">My Requests</a>
-                    <a href="/auth/sign-out" aria-label="Sign out">Trash Out</a>
+                    <a href="/inventory" class="btn btn-secondary" aria-label="My Inventory">My Inventory</a>
+                    <a href="/items" class="btn btn-secondary" aria-label="Browse Materials">Browse</a>
+                    <a href="/trading" class="btn btn-secondary" aria-label="Trading Hub">Trading</a>
+                    <a href="/critique" class="btn btn-secondary" aria-label="Discourse">Discourse</a>
+                    <span style="color: var(--text-secondary); margin: 0 1rem;">Welcome, <%= user.username %></span>
+                    <a href="/auth/sign-out" class="btn btn-secondary" aria-label="Sign out">Sign Out</a>
                 </nav>
             <% } else { %>
                 <nav>
-                    <a href="/auth/sign-up" aria-label="Sign up">INITIAL ACCESS</a>
-                    <a href="/auth/sign-in" aria-label="Sign in">DUMPSTER DIVE</a>
+                    <a href="/auth/sign-up" class="btn" aria-label="Join Society">Join Society</a>
+                    <a href="/auth/sign-in" class="btn btn-secondary" aria-label="Sign in">Sign In</a>
                 </nav>
             <% } %>
-        </header>
+        </div>
+    </div>
+</header>

@@ -3,56 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Denied Analogue</title>
+    <title>Analog Society</title>
     <link rel="stylesheet" href="/styles/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="/scripts/offline-storage.js"></script>
 </head>
 <body>
-
-    <div class="slide-in-container"> 
+    <div class="content-wrapper">
         <header>
-            <% if (user) { %>
-                <h1>Welcome, <%= user.username %>!</h1>
-                <nav>
-                    <a href="/items" class="btn join-button" aria-label="Register Item">Register Item</a>
-                    <a href="/auth/sign-out" aria-label="Sign out">Trash Out</a>
-                </nav>
-            <% } else { %>
-                <!-- <h1>Digital Fortress</h1> -->
-                <nav>
-                    <a href="/auth/sign-up" aria-label="Sign up">INITIAL ACCESS</a>
-                    <a href="/auth/sign-in" aria-label="Sign in">DUMPSTER DIVE</a>
-                </nav>
-            <% } %>
+            <div class="container">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h1>Analog Society</h1>
+                    <% if (user) { %>
+                        <nav>
+                            <span style="color: var(--text-secondary); margin-right: 1rem;">Welcome, <%= user.username %></span>
+                            <a href="/items" class="btn" aria-label="Document Materials">Document Materials</a>
+                            <a href="/auth/sign-out" class="btn btn-secondary" aria-label="Sign out">Sign Out</a>
+                        </nav>
+                    <% } else { %>
+                        <nav>
+                            <a href="/auth/sign-up" class="btn" aria-label="Join Society">Join Society</a>
+                            <a href="/auth/sign-in" class="btn btn-secondary" aria-label="Sign in">Sign In</a>
+                        </nav>
+                    <% } %>
+                </div>
+            </div>
         </header>
 
         <main>
-            <section class="vip-lounge">
-                <p>
-                    <a href="/vip-lounge" aria-label="VIP Garbage Access">VIP GARBAGE ACCESS</a>
-                </p>
-            </section>
-
             <section class="hero">
                 <div class="container">
-                  <div class="image-container"> 
-                    <img 
-                      src="images/portalto80s.jpeg" 
-                      alt="A Portal" 
-                      class="hero-image"
-                    >
-                  </div>
-                  <!-- <h2>SALVAGE ELECTRONICS</h2> -->
-                  <p>ICONIC AUDIO & VIDEO</p>
-                  <a href="/items" class="btn join-button" aria-label="Register Items">Flush Risk</a>
+                    <h2>Preserving Analog Knowledge</h2>
+                    <p class="lead">Join a community of makers, collectors, and enthusiasts who value the enduring beauty and craftsmanship of analog materials. Document, trade, and preserve physical knowledge in our digital age.</p>
+                    <div class="image-container"> 
+                        <img 
+                            src="images/portalto80s.jpeg" 
+                            alt="Vintage analog equipment representing the beauty of physical materials" 
+                            class="hero-image"
+                        >
+                    </div>
+                    <a href="/items" class="btn" aria-label="Explore Materials">Explore Materials</a>
                 </div>
-              </section>
+            </section>
+
+            <section class="special-section">
+                <div class="container">
+                    <h3>Critical Discourse</h3>
+                    <p>Engage in thoughtful discussions about technology, institutions, and the importance of analog alternatives in our increasingly digital world.</p>
+                    <a href="/critique" class="btn btn-secondary" aria-label="Join Discussion">Join Discussion</a>
+                </div>
+            </section>
+
+            <section class="special-section" style="background: var(--bg-secondary);">
+                <div class="container">
+                    <h3>Trading Hub</h3>
+                    <p>Exchange, trade, rent, and share analog materials with community members. Build connections through material exchange and preserve knowledge through sharing.</p>
+                    <a href="/trading" class="btn" aria-label="Visit Trading Hub">Visit Trading Hub</a>
+                </div>
+            </section>
+
+            <section class="special-section">
+                <div class="container">
+                    <h3>Why Document on Analog Society?</h3>
+                    <p>Discover the personal and community benefits of documenting your analog materials. Build your digital inventory, track value, and contribute to knowledge preservation.</p>
+                    <a href="/benefits" class="btn btn-secondary" aria-label="Learn About Benefits">Learn About Benefits</a>
+                </div>
+            </section>
         </main>
 
         <footer>
-            <p>CREDIT ACCEPTED</p>
+            <div class="container">
+                <p>&copy; 2024 Analog Society. Preserving knowledge, celebrating craftsmanship.</p>
+            </div>
         </footer>
     </div>
-
-   
 </body>
 </html>

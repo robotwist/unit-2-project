@@ -3,7 +3,7 @@ const Item = require('../models/Item'); // Adjust the path as necessary
 
 // Utility function for validating item data
 const validateItem = (data) => {
-  const { name, description, category, condition, image } = data;
+  const { name, description, category, condition, provenance, technicalDetails, tradeType, estimatedValue } = data;
   const errors = [];
 
   if (!name || typeof name !== 'string' || name.trim().length === 0) {
@@ -14,7 +14,7 @@ const validateItem = (data) => {
     errors.push('Description is required and must be a non-empty string.');
   }
 
-  const validCategories = ['Books', 'Records', 'Games', 'Art', 'Electronics', 'Others'];
+  const validCategories = ['Audio Equipment', 'Video Equipment', 'Photography', 'Books', 'Records', 'Tools', 'Art', 'Electronics', 'Crafts', 'Others'];
   if (!category || !validCategories.includes(category)) {
     errors.push(`Category is required and must be one of the following: ${validCategories.join(', ')}.`);
   }
@@ -24,8 +24,13 @@ const validateItem = (data) => {
     errors.push(`Condition is required and must be one of the following: ${validConditions.join(', ')}.`);
   }
 
-  if (image && typeof image !== 'string') {
-    errors.push('Image URL must be a string.');
+  const validTradeTypes = ['Trade', 'Rent', 'Sell', 'Share'];
+  if (tradeType && !validTradeTypes.includes(tradeType)) {
+    errors.push(`Trade type must be one of the following: ${validTradeTypes.join(', ')}.`);
+  }
+
+  if (estimatedValue && (isNaN(estimatedValue) || estimatedValue < 0)) {
+    errors.push('Estimated value must be a positive number.');
   }
 
   return errors;
@@ -35,13 +40,17 @@ const validateItem = (data) => {
 
 const createItem = async (req, res) => {
   console.log(req.body, "req.body")
+  console.log(req.files, "req.files")
   
   try {
     // Extract item details from request body
-    const { name, description, category, condition, image } = req.body;
+    const { name, description, category, condition, provenance, technicalDetails, tradeType, estimatedValue } = req.body;
 
     // Retrieve user ID from session
     const userId = req.session.user.id;
+
+    // Handle uploaded images
+    const images = req.files ? req.files.map(file => `/uploads/${file.filename}`) : [];
 
     // Validate input data
     const validationErrors = validateItem(req.body);
@@ -55,7 +64,11 @@ const createItem = async (req, res) => {
       description: description.trim(),
       category,
       condition,
-      image: image ? image.trim() : '',
+      images,
+      provenance: provenance ? provenance.trim() : '',
+      technicalDetails: technicalDetails ? technicalDetails.trim() : '',
+      tradeType: tradeType || 'Share',
+      estimatedValue: estimatedValue ? parseFloat(estimatedValue) : 0,
       userId: userId,
     });
 

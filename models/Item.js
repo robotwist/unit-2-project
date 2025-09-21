@@ -11,7 +11,7 @@ const itemSchema = new mongoose.Schema({
     },
     category: {
         type: String,
-        enum: ['Books', 'Records', 'Games', 'Art', 'Electronics', 'Others'],
+        enum: ['Audio Equipment', 'Video Equipment', 'Photography', 'Books', 'Records', 'Tools', 'Art', 'Electronics', 'Crafts', 'Others'],
         default: 'Others'
     },
     condition: {
@@ -24,9 +24,42 @@ const itemSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    image: {
-        type: String, // URL to the image
+    images: [{
+        type: String, // Array of image URLs
+        required: false
+    }],
+    provenance: {
+        type: String, // History and origin of the item
         default: ''
+    },
+    technicalDetails: {
+        type: String, // Technical specifications and details
+        default: ''
+    },
+    tradeType: {
+        type: String,
+        enum: ['Trade', 'Rent', 'Sell', 'Share'],
+        default: 'Share'
+    },
+    estimatedValue: {
+        type: Number, // Estimated value in dollars
+        default: 0
+    },
+    
+    // Community engagement tracking
+    viewCount: {
+        type: Number,
+        default: 0
+    },
+    lastViewed: {
+        type: Date,
+        default: null
+    },
+    
+    // Documentation quality score
+    documentationScore: {
+        type: Number,
+        default: 0
     },
     availabilityStatus: {
         type: String,

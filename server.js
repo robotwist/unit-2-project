@@ -8,10 +8,14 @@ const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 const morgan = require('morgan');
 const session = require('express-session');
+const multer = require('multer');
+const path = require('path');
 
 const itemsRouter = require('./routes/itemsRoutes.js');
 const requestsRouter = require('./routes/requestsRoutes.js');
 const exchangeRouter = require('./routes/exchangeRoutes.js');
+const tradingRouter = require('./routes/tradingRoutes.js');
+const inventoryRouter = require('./routes/inventoryRoutes.js');
 
 const requestsController = require('./routes/requestsRoutes.js');
 const itemsController = require('./controllers/itemsController.js');
@@ -40,12 +44,42 @@ mongoose.connection.on('disconnected', () => {
   console.log('MongoDB connection disconnected.');
 });
 
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/uploads/')
+  },
+  filename: function (req, file, cb) {
+    // Generate unique filename with timestamp
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ 
+  storage: storage,
+  limits: {
+    fileSize: 10 * 1024 * 1024 // 10MB limit
+  },
+  fileFilter: function (req, file, cb) {
+    // Accept only image files
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed!'), false);
+    }
+  }
+});
+
 // Middleware
 app.use(express.urlencoded({ extended: false })); // Parse URL-encoded form data
 app.use(express.json()); // Parse JSON payloads
 app.use(methodOverride('_method')); // Support method override for PUT/DELETE
 app.use(express.static('public')); // Serve static files from 'public' directory
 app.use(morgan('dev')); // Log HTTP requests
+
+// Make upload middleware available to routes
+app.locals.upload = upload;
 
 // Session Configuration (using environment variables)
 app.use(
@@ -79,18 +113,40 @@ app.get('/sign-in', (req, res) => {
   res.render('auth/sign-in'); 
 });
 
-app.get('/vip-lounge', isSignedIn, (req, res) => {
+app.get('/critique', isSignedIn, (req, res) => {
   if (req.session.user) {
-    res.send('There are no VIPs in the garbage dump you filthy animal!')
+    res.render('critique/index', { user: req.session.user });
   } else {
-    res.send('Sorry, no guests allowed.');
+    res.redirect('/auth/sign-in');
   }
+});
+
+app.get('/trading', isSignedIn, (req, res) => {
+  if (req.session.user) {
+    res.render('trading/index', { user: req.session.user });
+  } else {
+    res.redirect('/auth/sign-in');
+  }
+});
+
+app.get('/inventory', isSignedIn, (req, res) => {
+  if (req.session.user) {
+    res.render('inventory/personal', { user: req.session.user });
+  } else {
+    res.redirect('/auth/sign-in');
+  }
+});
+
+app.get('/benefits', (req, res) => {
+  res.render('benefits/index', { user: req.session.user });
 });
 // Auth Controller (mounted under '/auth')
 app.use('/auth', authController);
 app.use('/items', itemsRouter);
 app.use('/requests', requestsRouter);
 app.use('/exchanges', exchangeRouter);
+app.use('/trading', tradingRouter);
+app.use('/inventory', inventoryRouter);
 
 // Start Server
 app.listen(port, () => {

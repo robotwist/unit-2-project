@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline - Analog Society</title>
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="content-wrapper">
+        <main>
+            <div class="container" style="padding: 4rem 0; text-align: center;">
+                <div style="font-size: 6rem; margin-bottom: 2rem;">📡</div>
+                
+                <h1>You're Offline</h1>
+                <p class="lead" style="margin-bottom: 3rem;">
+                    Don't worry - your analog society continues to thrive even without an internet connection.
+                </p>
+                
+                <div class="form-container" style="max-width: 600px; margin: 0 auto;">
+                    <h3>Offline Capabilities</h3>
+                    <div class="stats-grid" style="margin-top: 2rem;">
+                        <div class="stat-card">
+                            <div style="font-size: 2rem; color: var(--accent-cool); margin-bottom: 1rem;">📱</div>
+                            <div style="font-weight: 700; margin-bottom: 0.5rem;">Local Inventory</div>
+                            <div style="font-size: 0.9rem; color: var(--text-secondary);">
+                                View and manage your documented materials
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div style="font-size: 2rem; color: var(--accent-cool); margin-bottom: 1rem;">✏️</div>
+                            <div style="font-weight: 700; margin-bottom: 0.5rem;">Add Materials</div>
+                            <div style="font-size: 0.9rem; color: var(--text-secondary);">
+                                Document new materials - syncs when online
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div style="font-size: 2rem; color: var(--accent-cool); margin-bottom: 1rem;">💾</div>
+                            <div style="font-weight: 700; margin-bottom: 0.5rem;">Data Export</div>
+                            <div style="font-size: 0.9rem; color: var(--text-secondary);">
+                                Export your inventory data anytime
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div style="font-size: 2rem; color: var(--accent-cool); margin-bottom: 1rem;">🔄</div>
+                            <div style="font-weight: 700; margin-bottom: 0.5rem;">Auto Sync</div>
+                            <div style="font-size: 0.9rem; color: var(--text-secondary);">
+                                Changes sync automatically when online
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 3rem;">
+                        <button onclick="loadOfflineInventory()" class="btn" style="margin-right: 1rem;">
+                            View Local Inventory
+                        </button>
+                        <button onclick="tryReconnect()" class="btn btn-secondary">
+                            Try Again
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="offlineInventory" style="margin-top: 3rem; display: none;">
+                    <h3>Your Local Inventory</h3>
+                    <div id="inventoryList" class="items-grid">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/scripts/offline-storage.js"></script>
+    <script>
+        let offlineStorage;
+        
+        // Initialize offline storage
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                offlineStorage = new OfflineStorage();
+                console.log('Offline storage initialized');
+            } catch (error) {
+                console.error('Failed to initialize offline storage:', error);
+            }
+        });
+        
+        // Load offline inventory
+        async function loadOfflineInventory() {
+            try {
+                const items = await offlineStorage.getInventoryItems();
+                const container = document.getElementById('inventoryList');
+                const panel = document.getElementById('offlineInventory');
+                
+                if (items.length === 0) {
+                    container.innerHTML = `
+                        <div class="no-items">
+                            <p>No items found in local storage.</p>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary);">
+                                Add materials when you have an internet connection.
+                            </p>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = items.map(item => `
+                        <div class="item-card">
+                            <div class="item-info">
+                                <div class="item-name">${item.name}</div>
+                                <div class="item-description">${item.description}</div>
+                                <div class="item-meta">
+                                    <span class="item-category">${item.category}</span>
+                                    <span class="item-condition">${item.condition}</span>
+                                    ${item.estimatedValue > 0 ? `<span class="item-category" style="background: var(--success); color: white;">$${item.estimatedValue}</span>` : ''}
+                                </div>
+                                <div style="background: var(--bg-secondary); padding: 0.75rem; border-radius: 6px; margin: 1rem 0;">
+                                    <div style="font-size: 0.8rem; color: var(--accent-cool); font-weight: 600; margin-bottom: 0.25rem;">
+                                        📱 Stored Locally
+                                    </div>
+                                    <div style="font-size: 0.9rem; color: var(--text-secondary);">
+                                        Last updated: ${new Date(item.updatedAt).toLocaleDateString()}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+                
+                panel.style.display = 'block';
+            } catch (error) {
+                console.error('Failed to load offline inventory:', error);
+                alert('Failed to load offline inventory');
+            }
+        }
+        
+        // Try to reconnect
+        function tryReconnect() {
+            if (navigator.onLine) {
+                window.location.href = '/';
+            } else {
+                alert('Still offline. Check your internet connection.');
+            }
+        }
+        
+        // Check connection status periodically
+        setInterval(() => {
+            if (navigator.onLine) {
+                window.location.href = '/';
+            }
+        }, 5000);
+    </script>
+</body>
+</html>

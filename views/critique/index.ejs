@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Critical Discourse - Analog Society</title>
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="content-wrapper">
+        <header>
+            <div class="container">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h1>Analog Society</h1>
+                    <nav>
+                        <span style="color: var(--text-secondary); margin-right: 1rem;">Welcome, <%= user.username %></span>
+                        <a href="/" class="btn btn-secondary" aria-label="Home">Home</a>
+                        <a href="/items" class="btn" aria-label="Materials">Materials</a>
+                        <a href="/auth/sign-out" class="btn btn-secondary" aria-label="Sign out">Sign Out</a>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="container" style="padding: 2rem 0;">
+                <h2>Critical Discourse</h2>
+                <p class="lead">Engage in thoughtful discussions about technology, institutions, and the importance of analog alternatives.</p>
+                
+                <div class="community-stats">
+                    <h3>Discussion Topics</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number">12</div>
+                            <div class="stat-label">Active Discussions</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">47</div>
+                            <div class="stat-label">Community Members</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">156</div>
+                            <div class="stat-label">Posts & Comments</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search-filter-section">
+                    <h3>Featured Discussions</h3>
+                    <div class="items-grid">
+                        <div class="item-card">
+                            <div class="item-info">
+                                <div class="item-name">The Obsolescence of Planned Obsolescence</div>
+                                <div class="item-description">
+                                    A deep dive into how analog materials and craftsmanship challenge the digital economy's built-in obsolescence model. 
+                                    Why do we accept that our devices should fail after a few years?
+                                </div>
+                                <div class="item-meta">
+                                    <span class="item-category">Technology Critique</span>
+                                    <span class="item-condition">Active</span>
+                                </div>
+                                <div class="item-actions">
+                                    <a href="#" class="btn">Join Discussion</a>
+                                    <a href="#" class="btn btn-secondary">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item-card">
+                            <div class="item-info">
+                                <div class="item-name">Institutional Knowledge Loss</div>
+                                <div class="item-description">
+                                    How institutions are losing critical analog knowledge in their rush to digitize everything. 
+                                    Case studies from libraries, museums, and educational institutions.
+                                </div>
+                                <div class="item-meta">
+                                    <span class="item-category">Institutional Analysis</span>
+                                    <span class="item-condition">Active</span>
+                                </div>
+                                <div class="item-actions">
+                                    <a href="#" class="btn">Join Discussion</a>
+                                    <a href="#" class="btn btn-secondary">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item-card">
+                            <div class="item-info">
+                                <div class="item-name">Analog Solutions to Digital Problems</div>
+                                <div class="item-description">
+                                    Exploring how physical materials and analog processes can solve problems created by digital systems. 
+                                    From privacy to sustainability to human connection.
+                                </div>
+                                <div class="item-meta">
+                                    <span class="item-category">Solutions</span>
+                                    <span class="item-condition">Active</span>
+                                </div>
+                                <div class="item-actions">
+                                    <a href="#" class="btn">Join Discussion</a>
+                                    <a href="#" class="btn btn-secondary">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item-card">
+                            <div class="item-info">
+                                <div class="item-name">The Economics of Durability</div>
+                                <div class="item-description">
+                                    Why analog materials often represent better long-term economic value than their digital counterparts. 
+                                    Analyzing total cost of ownership and sustainability metrics.
+                                </div>
+                                <div class="item-meta">
+                                    <span class="item-category">Economics</span>
+                                    <span class="item-condition">Active</span>
+                                </div>
+                                <div class="item-actions">
+                                    <a href="#" class="btn">Join Discussion</a>
+                                    <a href="#" class="btn btn-secondary">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-container" style="margin-top: 2rem;">
+                    <h3>Start a New Discussion</h3>
+                    <form action="/critique/new" method="POST">
+                        <div class="form-group">
+                            <label for="title">Discussion Title</label>
+                            <input type="text" id="title" name="title" class="search-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <select id="category" name="category" class="filter-select">
+                                <option value="technology-critique">Technology Critique</option>
+                                <option value="institutional-analysis">Institutional Analysis</option>
+                                <option value="solutions">Analog Solutions</option>
+                                <option value="economics">Economics</option>
+                                <option value="philosophy">Philosophy</option>
+                                <option value="case-studies">Case Studies</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="content">Discussion Content</label>
+                            <textarea id="content" name="content" class="search-input" rows="6" required></textarea>
+                        </div>
+                        <button type="submit" class="btn">Start Discussion</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <div class="container">
+                <p>&copy; 2024 Analog Society. Preserving knowledge, celebrating craftsmanship.</p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

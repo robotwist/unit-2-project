@@ -3,68 +3,123 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Analog Society - Register Item</title>
+  <title>Analog Society - Document Material</title>
   <link rel="stylesheet" href="/styles/main.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-
-  <div class="slide-in-container">
+  <div class="content-wrapper">
     <%- include('../partials/header') %>
 
     <main>
-      <h2>Register Item</h2>
+      <div class="container" style="padding: 2rem 0;">
+        <h2>Document Analog Material</h2>
+        <p class="lead">Share your analog materials with the community. Document their provenance, technical details, and make them available for trading, renting, or sharing.</p>
 
-      <% if (locals.errors) { %>
-        <ul class="error-messages">
-          <% for (const error of locals.errors) { %>
-            <li><%= error.message %></li>
-          <% } %>
-        </ul>
-      <% } %>
+        <% if (locals.errors) { %>
+          <div class="form-container" style="background: rgba(220, 53, 69, 0.1); border-color: var(--danger); margin-bottom: 2rem;">
+            <h3 style="color: var(--danger); margin-bottom: 1rem;">Please correct the following errors:</h3>
+            <ul style="color: var(--danger); margin: 0; padding-left: 1.5rem;">
+              <% for (const error of locals.errors) { %>
+                <li><%= error %></li>
+              <% } %>
+            </ul>
+          </div>
+        <% } %>
 
-      <form action="/items" method="POST">
-        <div class="form-group">
-          <label for="name">Item Name:</label>
-          <input type="text" id="name" name="name" required>
-        </div>
+        <% if (locals.error) { %>
+          <div class="form-container" style="background: rgba(220, 53, 69, 0.1); border-color: var(--danger); margin-bottom: 2rem;">
+            <p style="color: var(--danger); margin: 0;"><%= locals.error %></p>
+          </div>
+        <% } %>
 
-        <div class="form-group">
-          <label for="description">Description:</label>
-          <textarea id="description" name="description" rows="5" required></textarea>
-        </div>
+        <form action="/items" method="POST" enctype="multipart/form-data" class="form-container">
+          <div class="form-group">
+            <label for="name">Material Name *</label>
+            <input type="text" id="name" name="name" class="search-input" required 
+                   value="<%= locals.item ? locals.item.name : '' %>"
+                   placeholder="e.g., Sony Walkman WM-D6C Professional Cassette Recorder">
+          </div>
 
-        <div class="form-group">
-          <label for="category">Category:</label>
-          <select id="category" name="category" required>
-            <option value="" disabled selected>Select Category</option>
-            <option value="Books">Books</option>
-            <option value="Records">Records</option>
-            <option value="Games">Games</option>
-            <option value="Art">Art</option>
-            <option value="Electronics">Electronics</option>
-            <option value="Others">Others</option>
-          </select>
-        </div>
+          <div class="form-group">
+            <label for="description">Description *</label>
+            <textarea id="description" name="description" rows="4" class="search-input" required 
+                      placeholder="Describe the material, its purpose, and any notable features..."><%= locals.item ? locals.item.description : '' %></textarea>
+          </div>
 
-        <div class="form-group">
-          <label for="condition">Condition:</label>
-          <select id="condition" name="condition" required>
-            <option value="" disabled selected>Select Condition</option>
-            <option value="Excellent">Excellent</option>
-            <option value="Good">Good</option>
-            <option value="Fair">Fair</option>
-          </select>
-        </div>
+          <div class="form-group">
+            <label for="category">Category *</label>
+            <select id="category" name="category" class="filter-select" required>
+              <option value="" disabled selected>Select Category</option>
+              <option value="Audio Equipment" <%= locals.item && locals.item.category === 'Audio Equipment' ? 'selected' : '' %>>Audio Equipment</option>
+              <option value="Video Equipment" <%= locals.item && locals.item.category === 'Video Equipment' ? 'selected' : '' %>>Video Equipment</option>
+              <option value="Photography" <%= locals.item && locals.item.category === 'Photography' ? 'selected' : '' %>>Photography</option>
+              <option value="Books" <%= locals.item && locals.item.category === 'Books' ? 'selected' : '' %>>Books</option>
+              <option value="Records" <%= locals.item && locals.item.category === 'Records' ? 'selected' : '' %>>Records</option>
+              <option value="Tools" <%= locals.item && locals.item.category === 'Tools' ? 'selected' : '' %>>Tools</option>
+              <option value="Art" <%= locals.item && locals.item.category === 'Art' ? 'selected' : '' %>>Art</option>
+              <option value="Electronics" <%= locals.item && locals.item.category === 'Electronics' ? 'selected' : '' %>>Electronics</option>
+              <option value="Crafts" <%= locals.item && locals.item.category === 'Crafts' ? 'selected' : '' %>>Crafts</option>
+              <option value="Others" <%= locals.item && locals.item.category === 'Others' ? 'selected' : '' %>>Others</option>
+            </select>
+          </div>
 
-        <div class="form-group">
-          <label for="image">Image (Optional):</label>
-          <input type="file" id="image" name="image">
-          <p>Upload an image to represent your item.</p>
-        </div>
+          <div class="form-group">
+            <label for="condition">Condition *</label>
+            <select id="condition" name="condition" class="filter-select" required>
+              <option value="" disabled selected>Select Condition</option>
+              <option value="Excellent" <%= locals.item && locals.item.condition === 'Excellent' ? 'selected' : '' %>>Excellent - Like new, minimal wear</option>
+              <option value="Good" <%= locals.item && locals.item.condition === 'Good' ? 'selected' : '' %>>Good - Functional with some wear</option>
+              <option value="Fair" <%= locals.item && locals.item.condition === 'Fair' ? 'selected' : '' %>>Fair - Functional but significant wear</option>
+            </select>
+          </div>
 
-        <button type="submit">Register Item</button>
-        <a href="/items" class="btn btn-primary">Back to Items</a>
-      </form>
+          <div class="form-group">
+            <label for="provenance">Provenance</label>
+            <textarea id="provenance" name="provenance" rows="3" class="search-input" 
+                      placeholder="Where did this material come from? Any interesting history or previous owners?"><%= locals.item ? locals.item.provenance : '' %></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="technicalDetails">Technical Details</label>
+            <textarea id="technicalDetails" name="technicalDetails" rows="3" class="search-input" 
+                      placeholder="Specifications, model numbers, special features, modifications..."><%= locals.item ? locals.item.technicalDetails : '' %></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="tradeType">How would you like to share this?</label>
+            <select id="tradeType" name="tradeType" class="filter-select">
+              <option value="Share" <%= locals.item && locals.item.tradeType === 'Share' ? 'selected' : '' %>>Share - Available for community use</option>
+              <option value="Trade" <%= locals.item && locals.item.tradeType === 'Trade' ? 'selected' : '' %>>Trade - Available for trading</option>
+              <option value="Rent" <%= locals.item && locals.item.tradeType === 'Rent' ? 'selected' : '' %>>Rent - Available for rental</option>
+              <option value="Sell" <%= locals.item && locals.item.tradeType === 'Sell' ? 'selected' : '' %>>Sell - Available for purchase</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="estimatedValue">Estimated Value (USD)</label>
+            <input type="number" id="estimatedValue" name="estimatedValue" class="search-input" 
+                   min="0" step="0.01" 
+                   value="<%= locals.item ? locals.item.estimatedValue : '' %>"
+                   placeholder="0.00">
+          </div>
+
+          <div class="form-group">
+            <label for="images">Photos *</label>
+            <input type="file" id="images" name="images" multiple accept="image/*" class="search-input">
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">
+              Upload up to 5 photos of your material. Include different angles and any notable details.
+            </p>
+          </div>
+
+          <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+            <button type="submit" class="btn">Document Material</button>
+            <a href="/items" class="btn btn-secondary">Cancel</a>
+          </div>
+        </form>
+      </div>
     </main>
 
     <%- include('../partials/footer') %>

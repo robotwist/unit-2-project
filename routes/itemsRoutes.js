@@ -6,8 +6,20 @@ const itemsController = require('../controllers/itemsController');
 const isSignedIn = require('../middleware/isSignedIn');
 const Item = require('../models/Item'); // Import the Item model
 
-// Create a new item (Protected Route)
-router.post('/', isSignedIn, itemsController.createItem);
+// Create a new item (Protected Route with file upload)
+router.post('/', isSignedIn, (req, res, next) => {
+  const upload = req.app.locals.upload;
+  upload.array('images', 5)(req, res, (err) => {
+    if (err) {
+      console.error('Upload error:', err);
+      return res.status(400).render('items/new', { 
+        error: 'Error uploading images. Please ensure you are uploading image files only.',
+        item: req.body 
+      });
+    }
+    next();
+  });
+}, itemsController.createItem);
 
 // Get all items (Protected Route if you want to restrict visibility)
 router.get('/', isSignedIn, itemsController.getItems);

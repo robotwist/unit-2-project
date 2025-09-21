@@ -1,0 +1,18 @@
+.product-item {
+    background-color: #f0f0f0; /* Off-white background */
+    border: 1px solid #ccc; 
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    background-image: url('wood-grain-texture.jpg'); /* Subtle wood grain */
+    background-size: cover;
+  }
+  
+  .product-title {
+    font-family: 'Times New Roman', serif;
+    color: #333;
+  }
+  
+  .product-price {
+    color: #996633; /* Gold-like color */
+  }

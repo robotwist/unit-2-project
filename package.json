@@ -6,7 +6,7 @@
     "scripts": {
         "start": "node server.js",
         "dev": "nodemon server.js",
-        "build": "echo 'Build completed - ready for deployment'",
+        "build": "mkdir -p dist && cp -r public/* dist/ && echo 'Build completed - ready for deployment'",
         "test": "echo \"Error: no test specified\" && exit 1",
         "heroku-postbuild": "echo 'Heroku build completed'",
         "netlify-build": "echo 'Netlify build completed'"

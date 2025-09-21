@@ -5,11 +5,11 @@
             <% if (user) { %>
                 <nav>
                     <a href="/dashboard" class="btn btn-secondary" aria-label="Dashboard">Dashboard</a>
-                    <a href="/inventory" class="btn btn-secondary" aria-label="My Inventory">Inventory</a>
-                    <a href="/items" class="btn btn-secondary" aria-label="Browse Materials">Browse</a>
+                    <a href="/inventory" class="btn btn-secondary" aria-label="My Collection">Collection</a>
+                    <a href="/items" class="btn btn-secondary" aria-label="Browse Community">Browse</a>
                     <a href="/trading" class="btn btn-secondary" aria-label="Trading Hub">Trading</a>
                     <a href="/critique" class="btn btn-secondary" aria-label="Discourse">Discourse</a>
-                    <span style="color: var(--text-secondary); margin: 0 1rem;">Welcome, <%= user.username %></span>
+                    <span style="color: var(--text-secondary); margin: 0 1rem; font-weight: 500;">Welcome, <%= user.username %></span>
                     <a href="/auth/sign-out" class="btn btn-secondary" aria-label="Sign out">Sign Out</a>
                 </nav>
             <% } else { %>

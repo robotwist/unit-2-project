@@ -15,8 +15,13 @@
 
     <main>
       <div class="container" style="padding: 2rem 0;">
-        <h2>Document Analog Material</h2>
-        <p class="lead">Share your analog materials with the community. Document their provenance, technical details, and make them available for trading, renting, or sharing.</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+          <div>
+            <h2>Add to Your Collection</h2>
+            <p class="lead">Document your analog materials with photos, provenance, and technical details. Share with the community and contribute to knowledge preservation.</p>
+          </div>
+          <a href="/items" class="btn btn-secondary">← Back to Browse</a>
+        </div>
 
         <% if (locals.errors) { %>
           <div class="form-container" style="background: rgba(220, 53, 69, 0.1); border-color: var(--danger); margin-bottom: 2rem;">
@@ -37,16 +42,19 @@
 
         <form action="/items" method="POST" enctype="multipart/form-data" class="form-container">
           <div class="form-group">
-            <label for="name">Material Name *</label>
+            <label for="name">Item Name *</label>
             <input type="text" id="name" name="name" class="search-input" required 
                    value="<%= locals.item ? locals.item.name : '' %>"
-                   placeholder="e.g., Sony Walkman WM-D6C Professional Cassette Recorder">
+                   placeholder="e.g., Sony Walkman WM-D6C Professional Cassette Recorder"
+                   autocomplete="off">
+            <small style="color: var(--text-secondary); font-size: 0.8rem;">Include brand, model, and key identifying details</small>
           </div>
 
           <div class="form-group">
             <label for="description">Description *</label>
             <textarea id="description" name="description" rows="4" class="search-input" required 
-                      placeholder="Describe the material, its purpose, and any notable features..."><%= locals.item ? locals.item.description : '' %></textarea>
+                      placeholder="Describe the item's purpose, functionality, and any notable features or characteristics..."><%= locals.item ? locals.item.description : '' %></textarea>
+            <small style="color: var(--text-secondary); font-size: 0.8rem;">Help others understand what this item is and how it's used</small>
           </div>
 
           <div class="form-group">
@@ -77,25 +85,28 @@
           </div>
 
           <div class="form-group">
-            <label for="provenance">Provenance</label>
+            <label for="provenance">Provenance & History</label>
             <textarea id="provenance" name="provenance" rows="3" class="search-input" 
-                      placeholder="Where did this material come from? Any interesting history or previous owners?"><%= locals.item ? locals.item.provenance : '' %></textarea>
+                      placeholder="Where did this item come from? Any interesting history, previous owners, or special significance?"><%= locals.item ? locals.item.provenance : '' %></textarea>
+            <small style="color: var(--text-secondary); font-size: 0.8rem;">Optional: Share the story behind this item</small>
           </div>
 
           <div class="form-group">
-            <label for="technicalDetails">Technical Details</label>
+            <label for="technicalDetails">Technical Specifications</label>
             <textarea id="technicalDetails" name="technicalDetails" rows="3" class="search-input" 
-                      placeholder="Specifications, model numbers, special features, modifications..."><%= locals.item ? locals.item.technicalDetails : '' %></textarea>
+                      placeholder="Specifications, model numbers, special features, modifications, or technical details..."><%= locals.item ? locals.item.technicalDetails : '' %></textarea>
+            <small style="color: var(--text-secondary); font-size: 0.8rem;">Optional: Technical details for enthusiasts and collectors</small>
           </div>
 
           <div class="form-group">
-            <label for="tradeType">How would you like to share this?</label>
+            <label for="tradeType">Sharing Preference</label>
             <select id="tradeType" name="tradeType" class="filter-select">
-              <option value="Share" <%= locals.item && locals.item.tradeType === 'Share' ? 'selected' : '' %>>Share - Available for community use</option>
-              <option value="Trade" <%= locals.item && locals.item.tradeType === 'Trade' ? 'selected' : '' %>>Trade - Available for trading</option>
-              <option value="Rent" <%= locals.item && locals.item.tradeType === 'Rent' ? 'selected' : '' %>>Rent - Available for rental</option>
+              <option value="Share" <%= locals.item && locals.item.tradeType === 'Share' ? 'selected' : '' %>>Share - Document for community knowledge</option>
+              <option value="Trade" <%= locals.item && locals.item.tradeType === 'Trade' ? 'selected' : '' %>>Trade - Available for item exchange</option>
+              <option value="Rent" <%= locals.item && locals.item.tradeType === 'Rent' ? 'selected' : '' %>>Rent - Available for temporary use</option>
               <option value="Sell" <%= locals.item && locals.item.tradeType === 'Sell' ? 'selected' : '' %>>Sell - Available for purchase</option>
             </select>
+            <small style="color: var(--text-secondary); font-size: 0.8rem;">You can change this later in your inventory</small>
           </div>
 
           <div class="form-group">
@@ -104,19 +115,31 @@
                    min="0" step="0.01" 
                    value="<%= locals.item ? locals.item.estimatedValue : '' %>"
                    placeholder="0.00">
+            <small style="color: var(--text-secondary); font-size: 0.8rem;">Optional: Current market value for insurance and trading purposes</small>
           </div>
 
           <div class="form-group">
             <label for="images">Photos *</label>
             <input type="file" id="images" name="images" multiple accept="image/*" class="search-input">
-            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">
-              Upload up to 5 photos of your material. Include different angles and any notable details.
-            </p>
+            <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">
+              <p><strong>Upload 1-5 photos</strong> showing different angles and important details</p>
+              <ul style="margin: 0.5rem 0 0 1.5rem; font-size: 0.8rem;">
+                <li>Front view showing overall condition</li>
+                <li>Brand/model labels or markings</li>
+                <li>Any unique features or modifications</li>
+                <li>Wear patterns or condition details</li>
+              </ul>
+            </div>
           </div>
 
-          <div style="display: flex; gap: 1rem; margin-top: 2rem;">
-            <button type="submit" class="btn">Document Material</button>
-            <a href="/items" class="btn btn-secondary">Cancel</a>
+          <div style="display: flex; gap: 1rem; margin-top: 2rem; justify-content: space-between; align-items: center;">
+            <div style="color: var(--text-secondary); font-size: 0.9rem;">
+              <p style="margin: 0;">By adding this item, you're contributing to the community's knowledge preservation efforts.</p>
+            </div>
+            <div style="display: flex; gap: 1rem;">
+              <button type="submit" class="btn">Add to Collection</button>
+              <a href="/items" class="btn btn-secondary">Cancel</a>
+            </div>
           </div>
         </form>
       </div>

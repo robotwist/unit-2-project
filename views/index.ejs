@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analog Society</title>
+    <title>Analog Society - Knowledge Preservation & Material Exchange</title>
+    <meta name="description" content="Join a community of makers, collectors, and enthusiasts preserving analog knowledge through documentation, trading, and critical discourse.">
     <link rel="stylesheet" href="/styles/main.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,31 +13,13 @@
 </head>
 <body>
     <div class="content-wrapper">
-        <header>
-            <div class="container">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <h1>Analog Society</h1>
-                    <% if (user) { %>
-                        <nav>
-                            <span style="color: var(--text-secondary); margin-right: 1rem;">Welcome, <%= user.username %></span>
-                            <a href="/items" class="btn" aria-label="Document Materials">Document Materials</a>
-                            <a href="/auth/sign-out" class="btn btn-secondary" aria-label="Sign out">Sign Out</a>
-                        </nav>
-                    <% } else { %>
-                        <nav>
-                            <a href="/auth/sign-up" class="btn" aria-label="Join Society">Join Society</a>
-                            <a href="/auth/sign-in" class="btn btn-secondary" aria-label="Sign in">Sign In</a>
-                        </nav>
-                    <% } %>
-                </div>
-            </div>
-        </header>
+        <%- include('../partials/header') %>
 
         <main>
             <section class="hero">
                 <div class="container">
-                    <h2>Preserving Analog Knowledge</h2>
-                    <p class="lead">Join a community of makers, collectors, and enthusiasts who value the enduring beauty and craftsmanship of analog materials. Document, trade, and preserve physical knowledge in our digital age.</p>
+                    <h2>Preserve • Document • Exchange</h2>
+                    <p class="lead">Join a global community of makers, collectors, and enthusiasts who value the enduring beauty and craftsmanship of analog materials. Document your collection, trade with peers, and preserve physical knowledge for future generations.</p>
                     <div class="image-container"> 
                         <img 
                             src="images/portalto80s.jpeg" 
@@ -44,40 +27,39 @@
                             class="hero-image"
                         >
                     </div>
-                    <a href="/items" class="btn" aria-label="Explore Materials">Explore Materials</a>
+                    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                        <a href="/auth/sign-up" class="btn" aria-label="Join the Community">Join the Community</a>
+                        <a href="/items" class="btn btn-secondary" aria-label="Browse Collections">Browse Collections</a>
+                    </div>
                 </div>
             </section>
 
             <section class="special-section">
                 <div class="container">
                     <h3>Critical Discourse</h3>
-                    <p>Engage in thoughtful discussions about technology, institutions, and the importance of analog alternatives in our increasingly digital world.</p>
-                    <a href="/critique" class="btn btn-secondary" aria-label="Join Discussion">Join Discussion</a>
+                    <p>Engage in thoughtful discussions about technology, institutions, and the importance of analog alternatives in our increasingly digital world. Share insights, challenge assumptions, and explore the intersection of analog and digital cultures.</p>
+                    <a href="/critique" class="btn btn-secondary" aria-label="Join the Discussion">Join the Discussion</a>
                 </div>
             </section>
 
             <section class="special-section" style="background: var(--bg-secondary);">
                 <div class="container">
                     <h3>Trading Hub</h3>
-                    <p>Exchange, trade, rent, and share analog materials with community members. Build connections through material exchange and preserve knowledge through sharing.</p>
-                    <a href="/trading" class="btn" aria-label="Visit Trading Hub">Visit Trading Hub</a>
+                    <p>Exchange, trade, rent, and share analog materials with trusted community members. Build lasting connections through material exchange while preserving knowledge through collaborative sharing.</p>
+                    <a href="/trading" class="btn" aria-label="Start Trading">Start Trading</a>
                 </div>
             </section>
 
             <section class="special-section">
                 <div class="container">
-                    <h3>Why Document on Analog Society?</h3>
-                    <p>Discover the personal and community benefits of documenting your analog materials. Build your digital inventory, track value, and contribute to knowledge preservation.</p>
-                    <a href="/benefits" class="btn btn-secondary" aria-label="Learn About Benefits">Learn About Benefits</a>
+                    <h3>Why Choose Analog Society?</h3>
+                    <p>Discover the personal and community benefits of documenting your analog materials. Build a comprehensive digital inventory, track collection value, and contribute to global knowledge preservation while maintaining full data ownership.</p>
+                    <a href="/benefits" class="btn btn-secondary" aria-label="Explore Benefits">Explore Benefits</a>
                 </div>
             </section>
         </main>
 
-        <footer>
-            <div class="container">
-                <p>&copy; 2024 Analog Society. Preserving knowledge, celebrating craftsmanship.</p>
-            </div>
-        </footer>
+        <%- include('../partials/footer') %>
     </div>
 </body>
 </html>

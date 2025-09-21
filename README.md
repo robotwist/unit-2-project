@@ -1,119 +1,124 @@
-Screenshot/Logo:
-![Analog App](https://github.com/user-attachments/assets/cb5c0db5-c938-419f-9d4e-95a717651acf)
+# Analog Society
 
-Your app's name: Analog Society App 
+![Analog Society Platform](https://github.com/user-attachments/assets/cb5c0db5-c938-419f-9d4e-95a717651acf)
 
-**Analog Society** is a sophisticated platform for collectors, makers, and enthusiasts who value the tactile beauty and enduring quality of analog materials. In a world increasingly dominated by digital disposability, we celebrate the craftsmanship, durability, and inherent value of physical objects.
+**Analog Society** is a modern platform for collectors, makers, and enthusiasts who value the enduring beauty and craftsmanship of analog materials. In our digital age, we celebrate physical objects, preserve knowledge, and build communities around analog culture.
 
-Our community documents, trades, rents, and sells analog materials while fostering critical discourse about technology, institutions, and the importance of preserving knowledge in physical form. We believe that the analog realm holds solutions to many of today's technological problems.
+## 🚀 Live Deployments
 
-Deployed app is at https://unit-2-project-analog-68891fefb380.herokuapp.com/
+- **Heroku**: https://analog-society-robwistrand-e3366076c4b6.herokuapp.com/
+- **Netlify**: https://analog-society-robwistrand.netlify.app/
 
-Project planning items are here https://trello.com/b/1XdXn3zM/ga-project-men-stack-crud-app
+## 🎯 Mission
 
-Technologies used: Node.JS, JavaScript, HTML, CSS, Express, MongoDB
+We believe analog materials hold solutions to many of today's technological problems. Our community documents, trades, and preserves physical knowledge while fostering critical discourse about technology and institutions.
 
-Next Build: Enhanced trading, renting, and selling functionality with photo documentation, local-first architecture for knowledge preservation, and a dedicated space for critical discourse on technology and institutions.
-# Analog Society: Knowledge Preservation & Material Exchange Platform
+## 🛠️ Technologies
 
-Welcome to **Analog Society**, a full-stack web application designed to preserve, document, and exchange analog materials while fostering critical discourse about technology and institutions. This platform combines elegant design with robust functionality, offering users a sophisticated space to celebrate physical craftsmanship and challenge digital hegemony.
+- **Backend**: Node.js, Express, MongoDB, Mongoose
+- **Frontend**: EJS, HTML5, CSS3, JavaScript
+- **Features**: File uploads, authentication, real-time analytics
+- **Deployment**: Heroku, Netlify, MongoDB Atlas
 
-## Table of Contents
+## ✨ Key Features
 
-- [Project Overview](#project-overview)
-- [Features](#features)
-- [Installation and Setup](#installation-and-setup)
-- [Usage](#usage)
-- [Design Elements](#design-elements)
-- [Contributing](#contributing)
-- [License](#license)
+- **📸 Material Documentation** - Upload photos, add provenance, and track technical details
+- **🔄 Trading System** - Trade, rent, sell, or share materials with community members
+- **📊 Personal Inventory** - Comprehensive collection management with analytics
+- **🏆 Recognition Levels** - 5-tier community recognition system with benefits
+- **💾 Data Ownership** - Export your data anytime - no vendor lock-in
+- **🌐 Offline-First** - Local storage with automatic sync when online
+- **💬 Critical Discourse** - Space for technology and institutional critique
+- **📱 Responsive Design** - Works beautifully on all devices
 
-## Project Overview
+## 🚀 Getting Started
 
-**Analog Society** is inspired by the preservation of physical knowledge and the celebration of analog craftsmanship. Users can document, trade, rent, and sell analog materials while participating in critical discourse about technology and institutions. The platform emphasizes local-first architecture, allowing communities to maintain their own knowledge repositories while maintaining a lightweight online presence.
+### Prerequisites
+- Node.js (v18 or higher)
+- MongoDB (local or cloud)
+- Git
 
-## Features
+### Installation
+```bash
+# Clone the repository
+git clone https://github.com/robotwist/analog-society.git
+cd analog-society/unit-2-project
 
-- **Material Documentation**: Comprehensive photo and text documentation of analog materials with detailed provenance and condition reports.
-- **Trading System**: Sophisticated trading, renting, and selling functionality with community-driven valuation.
-- **Knowledge Preservation**: Local-first architecture that allows communities to maintain their own knowledge repositories.
-- **Critical Discourse**: Dedicated spaces for discussing technology critique, institutional analysis, and analog alternatives.
-- **Community Authentication**: Secure user system that respects privacy and community governance.
-- **Responsive Design**: Clean, accessible interface optimized for documentation and community interaction.
-- **Search & Discovery**: Advanced filtering and search capabilities for finding specific materials and discussions.
+# Install dependencies
+npm install
 
-## Installation and Setup
+# Set up environment variables
+cp env.example .env
+# Edit .env with your MongoDB URI and session secret
 
-To run **Analog Society** locally, follow these steps:
+# Start the development server
+npm run dev
+```
 
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/robotwist/analog-society.git
-   cd analog-society
-   ```
+### Environment Variables
+```bash
+MONGODB_URI=your_mongodb_connection_string
+SESSION_SECRET=your_super_secret_session_key
+NODE_ENV=development
+PORT=3045
+```
 
-2. **Install Dependencies**:
-   Ensure you have [Node.js](https://nodejs.org/) installed. Then, run:
-   ```bash
-   npm install
-   ```
+## 📖 Usage
 
-3. **Set Up Environment Variables**:
-   Create a `.env` file in the root directory with the following content:
-   ```
-   DATABASE_URL=your_database_url
-   SECRET_KEY=your_secret_key
-   ```
+### For Collectors
+1. **Sign up** for an Analog Society account
+2. **Document your materials** with photos, descriptions, and provenance
+3. **Track your collection** with built-in analytics and value estimation
+4. **Export your data** anytime in JSON or CSV format
 
-4. **Run the Application**:
-   ```bash
-   npm start
-   ```
-   The app should now be running on `http://localhost:3045`.
+### For Traders
+1. **Set sharing preferences** for each item (Share, Trade, Rent, Sell)
+2. **Browse community inventory** to find materials you need
+3. **Initiate exchanges** with trusted community members
+4. **Build reputation** through successful trades and quality documentation
 
-## Usage
+### For Communities
+1. **Join discussions** in the Critical Discourse section
+2. **Contribute to knowledge preservation** by documenting rare materials
+3. **Build recognition** through the 5-tier community system
+4. **Access offline functionality** for local knowledge repositories
 
-Once the application is up and running:
+## 🎨 Design Philosophy
 
-- **Document Materials**: Upload photos and detailed descriptions of analog materials in your collection.
-- **Browse Community**: Explore materials shared by other community members, filtering by category, condition, and availability.
-- **Trade & Exchange**: Initiate trades, rentals, or sales with other community members using our built-in negotiation system.
-- **Participate in Discourse**: Join discussions about technology critique, institutional analysis, and analog alternatives.
-- **Build Local Knowledge**: Contribute to community knowledge repositories that can function independently of centralized systems.
+- **Enterprise-Grade UI** - Clean, professional interface suitable for serious communities
+- **Accessibility-First** - WCAG compliant with proper ARIA labels and keyboard navigation
+- **Mobile-Responsive** - Optimized for all devices and screen sizes
+- **Performance-Focused** - Fast loading with offline capabilities
+- **Data Ownership** - Users maintain complete control of their information
 
-## Design Elements
+## 🏆 Community Recognition Levels
 
-To create an elegant, professional platform that celebrates analog craftsmanship, **Analog Society** incorporates:
+1. **Analog Member** - Document up to 10 materials, browse community
+2. **Analog Contributor** - Unlimited documentation, trading access
+3. **Analog Enthusiast** - Early access, mentoring opportunities
+4. **Analog Expert** - Expert recognition, curator privileges
+5. **Analog Master** - Platform governance, lifetime access
 
-- **Clean Typography**: Strong, readable fonts that prioritize legibility and accessibility.
-- **Material-Focused Layout**: Design elements that highlight the physical nature of documented items.
-- **Minimalist Aesthetic**: Uncluttered interface that lets materials and content be the focus.
-- **Dark/Light Mode**: Sophisticated color schemes that respect user preferences and reduce eye strain.
-- **Responsive Grid**: Flexible layouts that work beautifully across all devices while maintaining readability.
+## 🤝 Contributing
 
-## Contributing
+We welcome contributions from the community! Areas where you can help:
 
-Contributions are welcome! To get involved:
+- **Documentation** - Improve guides and help content
+- **Features** - Suggest and implement new functionality
+- **Design** - Enhance UI/UX and accessibility
+- **Testing** - Help identify and fix bugs
+- **Community** - Participate in discourse and knowledge sharing
 
-1. Fork the repository.
-2. Create a new branch:
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-3. Make your changes and commit them:
-   ```bash
-   git commit -m 'Add some feature'
-   ```
-4. Push to the branch:
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-5. Open a Pull Request detailing your changes.
+## 📄 License
 
-## License
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+## 🌟 Acknowledgments
+
+- Built for the analog community by analog enthusiasts
+- Inspired by the preservation of physical knowledge
+- Celebrating craftsmanship in our digital age
 
 ---
 
-By integrating these elements, **Analog Society** offers users a sophisticated platform for preserving analog knowledge, fostering community exchange, and challenging digital hegemony through thoughtful discourse and material celebration. 
+**Ready to preserve analog knowledge?** [Join Analog Society today](https://analog-society-robwistrand-e3366076c4b6.herokuapp.com/)!

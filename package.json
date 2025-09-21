@@ -1,18 +1,26 @@
 {
-    "name": "men-stack-session-auth-template",
+    "name": "analog-society",
     "version": "1.0.0",
-    "description": "",
+    "description": "Knowledge Preservation & Material Exchange Platform for analog enthusiasts",
     "main": "server.js",
     "scripts": {
+        "start": "node server.js",
+        "dev": "nodemon server.js",
+        "build": "echo 'Build completed - ready for deployment'",
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node server.js"
+        "heroku-postbuild": "echo 'Heroku build completed'",
+        "netlify-build": "echo 'Netlify build completed'"
     },
     "repository": {
         "type": "git",
-        "url": "https://git.generalassemb.ly/modular-curriculum-all-courses/men-stack-session-auth-template"
+        "url": "https://github.com/robotwist/analog-society.git"
     },
-    "author": "",
-    "license": "ISC",
+    "author": "Robot Wistrand",
+    "license": "MIT",
+    "engines": {
+        "node": ">=18.0.0",
+        "npm": ">=8.0.0"
+    },
     "dependencies": {
         "bcrypt": "^5.1.1",
         "bcryptjs": "^2.4.3",

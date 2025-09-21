@@ -1,0 +1,50 @@
+{
+  "name": "Analog Society",
+  "description": "Knowledge Preservation & Material Exchange Platform for analog enthusiasts",
+  "repository": "https://github.com/robotwist/analog-society",
+  "logo": "https://raw.githubusercontent.com/robotwist/analog-society/main/logo.png",
+  "keywords": [
+    "analog",
+    "community",
+    "trading",
+    "knowledge-preservation",
+    "materials",
+    "exchange"
+  ],
+  "success_url": "/",
+  "scripts": {
+    "postdeploy": "echo 'Analog Society deployed successfully!'"
+  },
+  "env": {
+    "NODE_ENV": {
+      "description": "Environment setting",
+      "value": "production"
+    },
+    "SESSION_SECRET": {
+      "description": "Secret key for session management",
+      "generator": "secret"
+    },
+    "MONGODB_URI": {
+      "description": "MongoDB connection string",
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "eco"
+    }
+  },
+  "addons": [
+    {
+      "plan": "mongolab:sandbox",
+      "as": "MONGOLAB"
+    }
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "stack": "heroku-20"
+}

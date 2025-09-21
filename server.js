@@ -16,6 +16,7 @@ const requestsRouter = require('./routes/requestsRoutes.js');
 const exchangeRouter = require('./routes/exchangeRoutes.js');
 const tradingRouter = require('./routes/tradingRoutes.js');
 const inventoryRouter = require('./routes/inventoryRoutes.js');
+const benefitsRouter = require('./routes/benefitsRoutes.js');
 
 const requestsController = require('./routes/requestsRoutes.js');
 const itemsController = require('./controllers/itemsController.js');
@@ -140,6 +141,14 @@ app.get('/inventory', isSignedIn, (req, res) => {
 app.get('/benefits', (req, res) => {
   res.render('benefits/index', { user: req.session.user });
 });
+
+app.get('/dashboard', isSignedIn, (req, res) => {
+  if (req.session.user) {
+    res.render('dashboard/index', { user: req.session.user });
+  } else {
+    res.redirect('/auth/sign-in');
+  }
+});
 // Auth Controller (mounted under '/auth')
 app.use('/auth', authController);
 app.use('/items', itemsRouter);
@@ -147,10 +156,13 @@ app.use('/requests', requestsRouter);
 app.use('/exchanges', exchangeRouter);
 app.use('/trading', tradingRouter);
 app.use('/inventory', inventoryRouter);
+app.use('/benefits', benefitsRouter);
 
 // Start Server
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`The Express app is running on http://localhost:${port}`);
+  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`Database: ${process.env.MONGODB_URI ? 'Connected' : 'Not configured'}`);
 });
   
 // Handle Graceful Shutdown

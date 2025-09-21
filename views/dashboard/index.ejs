@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Analog Society</title>
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="content-wrapper">
+        <%- include('../partials/header') %>
+
+        <main>
+            <div class="container" style="padding: 2rem 0;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <div>
+                        <h2>Your Analog Society Dashboard</h2>
+                        <p class="lead">Track your contributions, benefits, and community engagement.</p>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <button onclick="refreshDashboard()" class="btn btn-secondary">Refresh</button>
+                        <a href="/items/new" class="btn">Add Material</a>
+                    </div>
+                </div>
+
+                <!-- Loading State -->
+                <div id="loadingState" class="search-filter-section" style="text-align: center; padding: 3rem;">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">⏳</div>
+                    <p>Loading your dashboard...</p>
+                </div>
+
+                <!-- Dashboard Content -->
+                <div id="dashboardContent" style="display: none;">
+                    <!-- Recognition Level -->
+                    <div id="recognitionLevel" class="community-stats" style="margin-bottom: 2rem;">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="stats-grid" style="margin-bottom: 2rem;">
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalItems">-</div>
+                            <div class="stat-label">Materials Documented</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalValue">-</div>
+                            <div class="stat-label">Collection Value</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalExchanges">-</div>
+                            <div class="stat-label">Completed Exchanges</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="communityViews">-</div>
+                            <div class="stat-label">Community Views</div>
+                        </div>
+                    </div>
+
+                    <!-- Benefits Overview -->
+                    <div id="benefitsOverview" class="search-filter-section" style="margin-bottom: 2rem;">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div id="recentActivity" class="search-filter-section" style="margin-bottom: 2rem;">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+
+                    <!-- Insights and Recommendations -->
+                    <div id="insights" class="search-filter-section">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Error State -->
+                <div id="errorState" class="search-filter-section" style="display: none; background: rgba(220, 53, 69, 0.1); border-color: var(--danger);">
+                    <h3 style="color: var(--danger);">Error Loading Dashboard</h3>
+                    <p>There was an error loading your dashboard data. Please try refreshing the page.</p>
+                    <button onclick="refreshDashboard()" class="btn">Try Again</button>
+                </div>
+            </div>
+        </main>
+
+        <%- include('../partials/footer') %>
+    </div>
+
+    <script>
+        let dashboardData = null;
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboard();
+        });
+
+        async function loadDashboard() {
+            try {
+                showLoading();
+                
+                // Load user benefits data
+                const benefitsResponse = await fetch('/benefits/my-benefits');
+                if (!benefitsResponse.ok) {
+                    throw new Error('Failed to load benefits data');
+                }
+                
+                dashboardData = await benefitsResponse.json();
+                
+                // Render dashboard
+                renderDashboard(dashboardData);
+                hideLoading();
+                
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+                showError();
+            }
+        }
+
+        function showLoading() {
+            document.getElementById('loadingState').style.display = 'block';
+            document.getElementById('dashboardContent').style.display = 'none';
+            document.getElementById('errorState').style.display = 'none';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('dashboardContent').style.display = 'block';
+        }
+
+        function showError() {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('dashboardContent').style.display = 'none';
+            document.getElementById('errorState').style.display = 'block';
+        }
+
+        function renderDashboard(data) {
+            // Update quick stats
+            document.getElementById('totalItems').textContent = data.items.total;
+            document.getElementById('totalValue').textContent = `$${data.items.totalValue.toFixed(0)}`;
+            document.getElementById('totalExchanges').textContent = data.exchanges.completed;
+            
+            // Render recognition level
+            renderRecognitionLevel(data.benefits.recognition);
+            
+            // Render benefits overview
+            renderBenefitsOverview(data.benefits);
+            
+            // Render recent activity
+            renderRecentActivity(data);
+            
+            // Render insights
+            renderInsights(data.benefits.insights);
+        }
+
+        function renderRecognitionLevel(recognition) {
+            const container = document.getElementById('recognitionLevel');
+            
+            container.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h3>Your Recognition Level</h3>
+                    <span class="status-badge" style="background: var(--${recognition.current.color}); color: white; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600;">
+                        ${recognition.current.name}
+                    </span>
+                </div>
+                
+                <div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <span style="font-weight: 600;">Progress to Next Level</span>
+                        <span style="color: var(--text-secondary);">${recognition.current.score} points</span>
+                    </div>
+                    <div style="background: var(--border-light); height: 8px; border-radius: 4px; overflow: hidden;">
+                        <div style="background: var(--accent-cool); height: 100%; width: ${recognition.current.progress}%; transition: width 0.3s ease;"></div>
+                    </div>
+                    ${recognition.current.nextLevel ? `
+                        <div style="text-align: center; margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);">
+                            ${recognition.current.nextLevel - recognition.current.score} more points to next level
+                        </div>
+                    ` : `
+                        <div style="text-align: center; margin-top: 0.5rem; font-size: 0.9rem; color: var(--accent-cool); font-weight: 600;">
+                            Maximum level achieved! 🎉
+                        </div>
+                    `}
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                    <div>
+                        <h4 style="color: var(--text-primary); margin-bottom: 1rem;">Current Perks</h4>
+                        <ul style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                            ${recognition.perks.map(perk => `<li>${perk}</li>`).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 style="color: var(--text-primary); margin-bottom: 1rem;">Achievements</h4>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                            ${recognition.achievements.map(achievement => `
+                                <span class="status-badge" style="background: var(--success); color: white; font-size: 0.8rem;">
+                                    ${achievement.name}
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderBenefitsOverview(benefits) {
+            const container = document.getElementById('benefitsOverview');
+            
+            container.innerHTML = `
+                <h3>Your Benefits Overview</h3>
+                <div class="stats-grid">
+                    ${Object.entries(benefits.personal).map(([key, benefit]) => `
+                        <div class="stat-card">
+                            <div style="color: var(--accent-cool); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; margin-bottom: 0.5rem;">
+                                Personal Benefit
+                            </div>
+                            <div style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">
+                                ${benefit.title}
+                            </div>
+                            <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+                                ${benefit.description}
+                            </div>
+                            <div style="color: var(--accent-cool); font-size: 0.8rem; font-weight: 600;">
+                                +${benefit.value} points
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <div style="margin-top: 2rem;">
+                    <h4 style="color: var(--text-primary); margin-bottom: 1rem;">Community Benefits</h4>
+                    <div class="stats-grid">
+                        ${Object.entries(benefits.community).map(([key, benefit]) => `
+                            <div class="stat-card">
+                                <div style="color: var(--success); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; margin-bottom: 0.5rem;">
+                                    Community Impact
+                                </div>
+                                <div style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">
+                                    ${benefit.title}
+                                </div>
+                                <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+                                    ${benefit.description}
+                                </div>
+                                <div style="color: var(--success); font-size: 0.8rem; font-weight: 600;">
+                                    +${benefit.value} points
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderRecentActivity(data) {
+            const container = document.getElementById('recentActivity');
+            
+            container.innerHTML = `
+                <h3>Recent Activity</h3>
+                <div class="items-grid">
+                    <div class="item-card">
+                        <div class="item-info">
+                            <div class="item-name">Collection Status</div>
+                            <div class="item-description">
+                                You have documented ${data.items.total} materials across ${Object.keys(data.items.categories).length} categories.
+                                ${data.items.totalValue > 0 ? `Your collection is valued at $${data.items.totalValue.toFixed(2)}.` : ''}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="item-card">
+                        <div class="item-info">
+                            <div class="item-name">Exchange Activity</div>
+                            <div class="item-description">
+                                You have completed ${data.exchanges.completed} exchanges with ${data.exchanges.active} currently active.
+                                ${data.exchanges.total > 0 ? 'Keep up the great community participation!' : 'Consider making your materials available for trading.'}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="item-card">
+                        <div class="item-info">
+                            <div class="item-name">Community Engagement</div>
+                            <div class="item-description">
+                                You've been a member since ${new Date(data.user.memberSince).toLocaleDateString()}.
+                                Your contributions help preserve analog knowledge for future generations.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderInsights(insights) {
+            const container = document.getElementById('insights');
+            
+            if (insights.length === 0) {
+                container.innerHTML = `
+                    <h3>Insights & Recommendations</h3>
+                    <div class="no-items">
+                        <p>You're doing great! No specific recommendations at this time.</p>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary);">
+                            Continue documenting materials and participating in the community to unlock more insights.
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = `
+                <h3>Insights & Recommendations</h3>
+                <div class="items-grid">
+                    ${insights.map(insight => `
+                        <div class="item-card">
+                            <div class="item-info">
+                                <div class="item-name">${insight.title}</div>
+                                <div class="item-description">${insight.message}</div>
+                                <div class="item-meta">
+                                    <span class="status-badge status-${insight.priority === 'high' ? 'pending' : insight.priority === 'medium' ? 'requested' : 'available'}">
+                                        ${insight.priority} priority
+                                    </span>
+                                </div>
+                                <div class="item-actions">
+                                    <button class="btn" onclick="handleInsightAction('${insight.action}')">
+                                        ${insight.action}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function handleInsightAction(action) {
+            switch(action.toLowerCase()) {
+                case 'add your first item':
+                case 'document more items':
+                    window.location.href = '/items/new';
+                    break;
+                case 'update trade settings':
+                    window.location.href = '/inventory';
+                    break;
+                case 'review insurance documentation':
+                    alert('Insurance documentation feature coming soon!');
+                    break;
+                default:
+                    console.log('Action:', action);
+            }
+        }
+
+        function refreshDashboard() {
+            loadDashboard();
+        }
+    </script>
+</body>
+</html>

@@ -29,6 +29,21 @@ const getPersonalInventory = async (req, res) => {
 
         // Calculate inventory analytics
         const analytics = await calculateInventoryAnalytics(userId);
+        
+        // Fetch benefits data if available
+        try {
+            const benefitsResponse = await fetch(`http://localhost:${process.env.PORT || 3045}/benefits/my-benefits`, {
+                headers: {
+                    'Cookie': req.headers.cookie
+                }
+            });
+            if (benefitsResponse.ok) {
+                const benefitsData = await benefitsResponse.json();
+                analytics.benefits = benefitsData.benefits;
+            }
+        } catch (error) {
+            console.log('Benefits API not available, using local calculation');
+        }
 
         res.render('inventory/personal', { 
             items, 
